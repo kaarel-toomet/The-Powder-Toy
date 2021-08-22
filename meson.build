@@ -53,7 +53,7 @@ endif
 
 uopt_static = get_option('static')
 use_tpt_libs = 'no'
-tpt_libs_vtag = 'v20210712201911'
+tpt_libs_vtag = 'v20210822114001'
 if uopt_static == 'system'
 	if copt_platform == 'win'
 		error('no way to find static system libraries on windows')
@@ -76,16 +76,15 @@ if use_tpt_libs != 'no'
 	if copt_architecture == 'x86_64' and copt_platform == 'win' and copt_compiler == 'gcc'
 		nope = true
 	endif
+	if nope
+		error('no prebuilt @0@-@1@-@2@-@3@ libraries are currently provided'.format(copt_architecture, copt_platform, copt_compiler, use_tpt_libs))
+	endif
 	quad_compiler = copt_compiler
 	if use_tpt_libs == 'dynamic' and copt_platform == 'win'
 		# DLLs should be compatible with anything, right?
 		quad_compiler = 'msvc'
 	endif
-	quad = '@0@-@1@-@2@-@3@'.format(copt_architecture, copt_platform, quad_compiler, use_tpt_libs)
-	if nope
-		error('no prebuilt @0@ libraries are currently provided'.format(quad))
-	endif
-	tpt_libs = subproject('tpt-libs-prebuilt-@0@-@1@'.format(quad, tpt_libs_vtag))
+	tpt_libs = subproject('tpt-libs-prebuilt-@0@-@1@-@2@-@3@-@4@'.format(copt_architecture, copt_platform, quad_compiler, use_tpt_libs, tpt_libs_vtag))
 endif
 
 uopt_native = get_option('native')
@@ -176,7 +175,7 @@ if copt_msvc
 	project_c_args += args_msvc
 	project_cpp_args += args_msvc
 else
-	args_ccomp = [ '-U__STRICT_ANSI__', '-Wno-unused-result' ]
+	args_ccomp = [ '-Wno-unused-result' ]
 	if copt_platform == 'mac'
 		if uopt_x86_sse_level >= 0
 			message('SSE level explicitly configured but unavailable on macosx')
@@ -234,6 +233,10 @@ if copt_platform == 'win'
 		foreach input_and_output : tpt_libs.get_variable('config_dlls')
 			configure_file(input: input_and_output[0], output: input_and_output[1], copy: true)
 		endforeach
+	endif
+elif copt_platform == 'lin'
+	if uopt_static != 'none'
+		project_link_args = [ '-static-libgcc', '-static-libstdc++' ]
 	endif
 endif
 
