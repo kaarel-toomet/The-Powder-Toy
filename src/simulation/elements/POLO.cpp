@@ -2,6 +2,7 @@
 
 static int update(UPDATE_FUNC_ARGS);
 static int graphics(GRAPHICS_FUNC_ARGS);
+//static void create(ELEMENT_CREATE_FUNC_ARGS);
 
 void Element::Element_POLO()
 {
@@ -31,8 +32,9 @@ void Element::Element_POLO()
 	Weight = 90;
 
 	DefaultProperties.temp = 388.15f;
+	DefaultProperties.tmp = 10000;
 	HeatConduct = 251;
-	Description = "Polonium, highly radioactive. Decays into NEUT and heats up.";
+	Description = "Polonium, highly radioactive. Decays into ALPH and heats up.";
 
 	Properties = TYPE_PART|PROP_NEUTPASS|PROP_RADIOACTIVE|PROP_LIFE_DEC|PROP_DEADLY;
 
@@ -47,67 +49,81 @@ void Element::Element_POLO()
 
 	Update = &update;
 	Graphics = &graphics;
+	//Create = &create;
 }
 
-constexpr int COOLDOWN = 15;
-constexpr int LIMIT = 5;
-
+// constexpr int COOLDOWN = 15;
+// constexpr int LIMIT = 5;
+// 
 static int update(UPDATE_FUNC_ARGS)
 {
-	int r = sim->photons[y][x];
-	if (parts[i].tmp < LIMIT && !parts[i].life)
-	{
-		if (RNG::Ref().chance(1, 10000) && !parts[i].tmp)
-		{
-			int s = sim->create_part(-3, x, y, PT_NEUT);
-			if (s >= 0)
-			{
-				parts[i].life = COOLDOWN;
-				parts[i].tmp++;
-
-				parts[i].temp = ((parts[i].temp + parts[s].temp) + 600.0f) / 2.0f;
-				parts[s].temp = parts[i].temp;
-			}
-		}
-
-		if (r && RNG::Ref().chance(1, 100))
-		{
-			int s = sim->create_part(-3, x, y, PT_NEUT);
-			if (s >= 0)
-			{
-				parts[i].temp = ((parts[i].temp + parts[ID(r)].temp + parts[ID(r)].temp) + 600.0f) / 3.0f;
-				parts[i].life = COOLDOWN;
-				parts[i].tmp++;
-
-				parts[ID(r)].temp = parts[i].temp;
-
-				parts[s].temp = parts[i].temp;
-				parts[s].vx = parts[ID(r)].vx;
-				parts[s].vy = parts[ID(r)].vy;
-			}
-		}
+// 	int r = sim->photons[y][x];
+// 	if (parts[i].tmp < LIMIT && !parts[i].life)
+// 	{
+// 		if (RNG::Ref().chance(1, 10000) && !parts[i].tmp)
+// 		{
+// 			int s = sim->create_part(-3, x, y, PT_NEUT);
+// 			if (s >= 0)
+// 			{
+// 				parts[i].life = COOLDOWN;
+// 				parts[i].tmp++;
+// 
+// 				parts[i].temp = ((parts[i].temp + parts[s].temp) + 600.0f) / 2.0f;
+// 				parts[s].temp = parts[i].temp;
+// 			}
+// 		}
+// 
+// 		if (r && RNG::Ref().chance(1, 100))
+// 		{
+// 			int s = sim->create_part(-3, x, y, PT_NEUT);
+// 			if (s >= 0)
+// 			{
+// 				parts[i].temp = ((parts[i].temp + parts[ID(r)].temp + parts[ID(r)].temp) + 600.0f) / 3.0f;
+// 				parts[i].life = COOLDOWN;
+// 				parts[i].tmp++;
+// 
+// 				parts[ID(r)].temp = parts[i].temp;
+// 
+// 				parts[s].temp = parts[i].temp;
+// 				parts[s].vx = parts[ID(r)].vx;
+// 				parts[s].vy = parts[ID(r)].vy;
+// 			}
+// 		}
+// 	}
+// 	if (parts[i].tmp2 >= 10)
+// 	{
+// 		sim->part_change_type(i,x,y,PT_PLUT);
+// 		parts[i].temp = (parts[i].temp+600.0f)/2.0f;
+// 		return 1;
+// 	}
+// 	if (TYP(r) == PT_PROT)
+// 	{
+// 		parts[i].tmp2++;
+// 		sim->kill_part(ID(r));
+// 	}
+// 	if (parts[i].temp < 388.15f)
+// 	{
+// 		parts[i].temp += 0.2f;
+// 	}
+  int a1;
+	if (RNG::Ref().chance(parts[i].tmp,20000)) {
+	  a1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ALPH);
+	  parts[a1].temp = parts[i].temp;
+	  parts[i].tmp -= 1;
+	  parts[i].temp += 2;
 	}
-	if (parts[i].tmp2 >= 10)
-	{
-		sim->part_change_type(i,x,y,PT_PLUT);
-		parts[i].temp = (parts[i].temp+600.0f)/2.0f;
-		return 1;
-	}
-	if (TYP(r) == PT_PROT)
-	{
-		parts[i].tmp2++;
-		sim->kill_part(ID(r));
-	}
-	if (parts[i].temp < 388.15f)
-	{
-		parts[i].temp += 0.2f;
+	if (RNG::Ref().chance(parts[i].tmp,20000)) {
+	  a1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ALPH);
+	  parts[a1].temp = parts[i].temp;
+	  parts[i].tmp -= 1;
+	  parts[i].temp += 2;
 	}
 	return 0;
 }
 
 static int graphics(GRAPHICS_FUNC_ARGS)
 {
-	if (cpart->tmp >= LIMIT)
+	if (cpart->tmp <= 10)
 	{
 		*colr = 0x70;
 		*colg = 0x70;
@@ -118,3 +134,8 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 
 	return 0;
 }
+
+//static void create(ELEMENT_CREATE_FUNC_ARGS) 
+//{
+//  parts[i].tmp = 1000
+//}

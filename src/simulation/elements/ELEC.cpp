@@ -1,3 +1,4 @@
+
 #include "simulation/ElementCommon.h"
 
 static int update(UPDATE_FUNC_ARGS);
@@ -53,6 +54,7 @@ void Element::Element_ELEC()
 static int update(UPDATE_FUNC_ARGS)
 {
 	int r, rt, rx, ry, nb, rrx, rry;
+  float dvx, dvy;
 	for (rx=-2; rx<=2; rx++)
 		for (ry=-2; ry<=2; ry++)
 			if (BOUNDS_CHECK) {
@@ -92,15 +94,28 @@ static int update(UPDATE_FUNC_ARGS)
 						sim->create_part(ID(r), x+rx, y+ry, PT_H2);
 					sim->kill_part(i);
 					return 1;
-				case PT_PROT: // this is the correct reaction, not NEUT, but leaving NEUT in anyway
+				case PT_PROT: // this is the correct reaction, not NEUT
 					if (parts[ID(r)].tmp2 & 0x1)
 						break;
-				case PT_NEUT:
-					sim->part_change_type(ID(r), x+rx, y+ry, PT_H2);
-					parts[ID(r)].life = 0;
-					parts[ID(r)].ctype = 0;
-					sim->kill_part(i);
-					break;
+					dvx = parts[ID(r)].vx - parts[i].vx;
+				  dvy = parts[ID(r)].vy - parts[i].vy;
+					if (dvx*dvx + dvy*dvy > 4) {break;}
+					
+				 	sim->part_change_type(ID(r), x+rx, y+ry, PT_H2);
+				 	parts[ID(r)].life = 0;
+				 	parts[ID(r)].ctype = 0;
+				 	sim->kill_part(i);
+				 	break;
+        case PT_ALPH:
+			    dvx = parts[ID(r)].vx - parts[i].vx;
+			    dvy = parts[ID(r)].vy - parts[i].vy;
+			    if (dvx*dvx + dvy*dvy > 4) {break;}
+			    
+				  sim->part_change_type(ID(r), x+rx, y+ry, PT_NBLE);
+				  parts[ID(r)].life = 0;
+				  parts[ID(r)].ctype = 0;
+				  sim->kill_part(i);
+				  break;
 				case PT_DEUT:
 					if(parts[ID(r)].life < 6000)
 						parts[ID(r)].life += 1;

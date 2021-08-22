@@ -135,14 +135,28 @@ static int update(UPDATE_FUNC_ARGS)
 		int newID, element;
 		if (parts[i].tmp > 500000)
 			element = PT_SING; //particle accelerators are known to create earth-destroying black holes
+		else if (parts[i].tmp > 1000)
+		  element = PT_UNST;
+		else if (parts[i].tmp > 900)
+		  element = PT_PLUT;
+		else if (parts[i].tmp > 800)
+		  element = PT_URAN;
 		else if (parts[i].tmp > 700)
-			element = PT_PLUT;
-		else if (parts[i].tmp > 420)
-			element = PT_URAN;
-		else if (parts[i].tmp > 310)
+		  element = PT_THOR;
+		else if (parts[i].tmp > 580)
 			element = PT_POLO;
+		else if (parts[i].tmp > 550)
+		  element = PT_MERC;
+		else if (parts[i].tmp > 500)
+			element = PT_GOLD;
+		else if (parts[i].tmp > 480)
+		  element = PT_PTNM;
+		else if (parts[i].tmp > 310)
+			element = PT_IRON;
+		else if (parts[i].tmp > 310)
+		  element = PT_TTAN;
 		else if (parts[i].tmp > 250)
-			element = PT_PLSM;
+			element = PT_SLCN;
 		else if (parts[i].tmp > 100)
 			element = PT_O2;
 		else if (parts[i].tmp > 50)
@@ -150,10 +164,14 @@ static int update(UPDATE_FUNC_ARGS)
 		else
 			element = PT_NBLE;
 		newID = sim->create_part(-1, x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1), element);
-		if (newID >= 0)
+		if (newID >= 0) {
 			parts[newID].temp = restrict_flt(100.0f*parts[i].tmp, MIN_TEMP, MAX_TEMP);
+		  if (element == PT_UNST) {
+		    parts[newID].tmp = parts[i].tmp/4;
+		  }
 		sim->kill_part(i);
 		return 1;
+		}
 	}
 	//collide with other protons to make heavier materials
 	int ahead = sim->photons[y][x];

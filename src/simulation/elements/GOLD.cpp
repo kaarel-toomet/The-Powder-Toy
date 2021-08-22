@@ -51,6 +51,7 @@ void Element::Element_GOLD()
 
 static int update(UPDATE_FUNC_ARGS)
 {
+  //parts[i].tmp = 0;
 	int rx, ry, r, rndstore;
 	static int checkCoordsX[] = { -4, 4, 0, 0 };
 	static int checkCoordsY[] = { 0, 0, -4, 4 };

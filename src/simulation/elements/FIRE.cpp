@@ -54,7 +54,7 @@ void Element::Element_FIRE()
 
 int Element_FIRE_update(UPDATE_FUNC_ARGS)
 {
-	int r, rx, ry, rt, t = parts[i].type;
+	int r, rx, ry, rt, a1, n1, t = parts[i].type;
 	switch (t)
 	{
 	case PT_PLSM:
@@ -136,6 +136,34 @@ int Element_FIRE_update(UPDATE_FUNC_ARGS)
 			parts[i].tmp2 = RNG::Ref().between(0, 10); // Provide tmp2 for color noise
 			parts[i].ctype = PT_ROCK;
 		}
+		else if (parts[i].ctype == PT_POLO) {
+		  if (RNG::Ref().chance(parts[i].tmp,20000)) {
+		    a1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ALPH);
+		    parts[a1].temp = parts[i].temp;
+		    parts[i].tmp -= 1;
+		    parts[i].temp += 2;
+		  }
+		  if (RNG::Ref().chance(parts[i].tmp,20000)) {
+		    a1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ALPH);
+		    parts[a1].temp = parts[i].temp;
+		    parts[i].tmp -= 1;
+		    parts[i].temp += 2;
+		  }
+		}
+		else if (parts[i].ctype == PT_CALI) {
+		  if (RNG::Ref().chance(1,2)) {
+		    a1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ALPH);
+		    parts[a1].temp = parts[i].temp;
+		    parts[i].tmp -= 1;
+		    parts[i].temp += 2;
+		  }
+		  if (RNG::Ref().chance(1,5)) {
+		    n1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_NEUT);
+		    parts[n1].temp = parts[i].temp;
+		    parts[i].tmp -= 1;
+		    parts[i].temp += 10;
+		  }
+		}
 		break;
 	default:
 		break;
@@ -150,7 +178,7 @@ int Element_FIRE_update(UPDATE_FUNC_ARGS)
 				rt = TYP(r);
 
 				//THRM burning
-				if (rt==PT_THRM && (t==PT_FIRE || t==PT_PLSM || t==PT_LAVA))
+				if (rt==PT_THRM && (parts[i].temp >= 900.0f || t==PT_LAVA))
 				{
 					if (RNG::Ref().chance(1, 500)) {
 						sim->part_change_type(ID(r),x+rx,y+ry,PT_LAVA);
@@ -166,7 +194,22 @@ int Element_FIRE_update(UPDATE_FUNC_ARGS)
 					}
 					continue;
 				}
-
+        
+        if ((rt==PT_POTA)) {
+          
+          if (t==PT_LAVA)
+          {
+            if (parts[i].ctype == PT_IRON && RNG::Ref().chance(1, 200))
+            {
+              parts[i].ctype = PT_PTST;
+              //sim->kill_part(ID(r));
+              continue;
+            }
+          }
+          
+        }
+        
+        
 				if ((rt==PT_COAL) || (rt==PT_BCOL))
 				{
 					if ((t==PT_FIRE || t==PT_PLSM))

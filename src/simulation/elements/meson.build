@@ -191,6 +191,17 @@ simulation_elem_ids = [
 	[ 'VSNS',   189 ],
 	[ 'ROCK',   190 ],
 	[ 'LITH',   191 ],
+	[ 'POTA',   192 ],
+	[ 'THOR',   193 ],
+	[ 'UNST',   194 ],
+	[ 'PTST',   195 ],
+	[ 'TIN',    196 ],
+	[ 'GTIN',   197 ],
+	[ 'TEST',   198 ],
+	[ 'ALPH',   199 ],
+	[ 'GGOO',   200 ],
+	[ 'BRYL',   201 ],
+	[ 'CALI',   202 ],
 ]
 
 simulation_elem_src = []

@@ -2444,9 +2444,14 @@ void Simulation::init_can_move()
 			can_move[movingType][PT_BVBR] = 1;
 		}
 
-		//SAWD cannot be displaced by other powders
+		//Powders cannot be displaced by other powders
 		if (elements[movingType].Properties & TYPE_PART)
-			can_move[movingType][PT_SAWD] = 0;
+		//	can_move[movingType][PT_SAWD] = 0;
+		  for (destinationType = 1; destinationType < PT_NUM; destinationType++) {
+		    if (elements[destinationType].Properties & TYPE_PART)
+		      can_move[movingType][destinationType] = 0;
+		  }
+		
 	}
 	//a list of lots of things PHOT can move through
 	// TODO: replace with property
@@ -2456,13 +2461,21 @@ void Simulation::init_can_move()
 		 || destinationType == PT_CLNE || destinationType == PT_PCLN || destinationType == PT_BCLN || destinationType == PT_PBCN
 		 || destinationType == PT_WATR || destinationType == PT_DSTW || destinationType == PT_SLTW || destinationType == PT_GLOW
 		 || destinationType == PT_ISOZ || destinationType == PT_ISZS || destinationType == PT_QRTZ || destinationType == PT_PQRT
-		 || destinationType == PT_H2   || destinationType == PT_BGLA || destinationType == PT_C5)
+		 || destinationType == PT_H2   || destinationType == PT_BGLA || destinationType == PT_C5   || destinationType == PT_WTRV 
+		 || destinationType == PT_CBNW)
 			can_move[PT_PHOT][destinationType] = 2;
 		if (destinationType != PT_DMND && destinationType != PT_INSL && destinationType != PT_VOID && destinationType != PT_PVOD && destinationType != PT_VIBR && destinationType != PT_BVBR && destinationType != PT_PRTI && destinationType != PT_PRTO)
 		{
 			can_move[PT_PROT][destinationType] = 2;
 			can_move[PT_GRVT][destinationType] = 2;
 		}
+		if (destinationType == PT_ALPH || destinationType == PT_FILT || destinationType == PT_INVIS|| destinationType == PT_CLNE
+     || destinationType == PT_PCLN || destinationType == PT_BCLN || destinationType == PT_PBCN || destinationType == PT_WATR
+     || destinationType == PT_DSTW || destinationType == PT_SLTW || destinationType == PT_GLOW || destinationType == PT_ISOZ
+     || destinationType == PT_ISZS || destinationType == PT_H2   || destinationType == PT_BRYL || destinationType == PT_PTST
+     || destinationType == PT_O2   || destinationType == PT_CO2  || destinationType == PT_NBLE || destinationType == PT_BOYL
+     || destinationType == PT_DEUT || destinationType == PT_HEAC || destinationType == PT_CBNW)
+        can_move[PT_ALPH][destinationType] = 2;
 	}
 
 	//other special cases that weren't covered above
@@ -2495,6 +2508,10 @@ void Simulation::init_can_move()
 	can_move[PT_THDR][PT_THDR] = 2;
 	can_move[PT_EMBR][PT_EMBR] = 2;
 	can_move[PT_TRON][PT_SWCH] = 3;
+	
+	can_move[PT_ALPH][PT_BRMT] = 3;
+	can_move[PT_NEUT][PT_BRMT] = 3;
+	can_move[PT_NEUT][PT_LAVA] = 3;
 }
 
 /*
@@ -2570,6 +2587,14 @@ int Simulation::eval_move(int pt, int nx, int ny, unsigned *rr)
 					return 0;
 			}
 			break;
+		case PT_BRMT:
+		  if (pt == PT_ALPH || pt == PT_NEUT)
+		    result = (parts[ID(r)].ctype == PT_BRYL) ? 2 : 0;
+		  break;
+		case PT_LAVA:
+		  if (pt == PT_NEUT)
+		    result = (elements[parts[ID(r)].ctype].Properties & PROP_NEUTPASS) ? 2 : 0;
+		  break;
 		default:
 			// This should never happen
 			// If it were to happen, try_move would interpret a 3 as a 1
@@ -3805,6 +3830,16 @@ void Simulation::UpdateParticles(int start, int end)
 									t = PT_LAVA;
 									parts[i].type = PT_TUNG;
 								}
+							}
+							if (parts[i].ctype == PT_BRYL)
+							{
+							  if (ctemph < elements[parts[i].ctype].HighTemperature)
+							    s = 0;
+							  else
+							  {
+							    t = PT_LAVA;
+							    parts[i].type = PT_BRYL;
+							  }
 							}
 							else if (ctemph >= elements[t].HighTemperature)
 								t = PT_LAVA;

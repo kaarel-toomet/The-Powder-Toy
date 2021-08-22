@@ -55,6 +55,7 @@ void Element::Element_NEUT()
 static int update(UPDATE_FUNC_ARGS)
 {
 	int r, rx, ry;
+  float v, a;
 	unsigned int pressureFactor = 3 + (int)sim->pv[y/CELL][x/CELL];
 	for (rx=-1; rx<2; rx++)
 		for (ry=-1; ry<2; ry++)
@@ -93,6 +94,49 @@ static int update(UPDATE_FUNC_ARGS)
 						Element_FIRE_update(UPDATE_FUNC_SUBCALL_ARGS);
 					}
 					break;
+				case PT_LAVA:
+				  if (parts[ID(r)].ctype == PT_BRYL)
+				  {
+				    parts[i].vx *= -0.8;
+				    parts[i].vy *= -0.8;
+				    v = RNG::Ref().between(64, 127) * parts[ID(r)].temp / 100000;
+				    a = RNG::Ref().between(0, 359) * 3.14159f / 180.0f;
+				    parts[i].vx += v * cosf(a);
+				    parts[i].vy += v * sinf(a);
+				    break;
+				  }
+				  if (!(parts[ID(r)].ctype == PT_THOR)){break;}
+				case PT_THOR:
+				  // neutron capture
+				  if (RNG::Ref().chance(parts[ID(r)].tmp2, 1000) && parts[ID(r)].tmp2 > 0) {
+				    sim->kill_part(i);
+				    parts[ID(r)].tmp2 -= 1;
+				    parts[ID(r)].tmp += 1;
+				    return 1;
+				  }
+				  // fission
+				  else if (RNG::Ref().chance(parts[ID(r)].tmp, 1000) && parts[ID(r)].tmp > 0) {
+				    sim->kill_part(i);
+				    parts[ID(r)].tmp -= 1;
+				    parts[ID(r)].temp += 50;
+				    int n1 = sim->create_part(-1,x,y,PT_NEUT);
+				    int n2 = sim->create_part(-1,x,y,PT_NEUT);
+				    int n3 = sim->create_part(-1,x,y,PT_NEUT);
+				    parts[n1].temp = parts[ID(r)].temp+50;
+				    parts[n2].temp = parts[ID(r)].temp+50;
+				    parts[n3].temp = parts[ID(r)].temp+50;
+				    sim->pv[y/CELL][x/CELL] += 2.0f * CFDS;
+				    //sim->create_part(-1,x,y,PT_NEUT);
+				    return 1;
+				  }
+				  //useless neutron capture
+				  else if (RNG::Ref().chance(1,50)) {
+				    sim->kill_part(i);
+				    return 1;
+				  }
+				  
+				  break;
+				  
 #ifdef SDEUT
 				case PT_DEUT:
 					if (RNG::Ref().chance(pressureFactor + 1 + (parts[ID(r)].life/100), 1000))
@@ -180,6 +224,26 @@ static int update(UPDATE_FUNC_ARGS)
 					else
 						sim->create_part(ID(r), x+rx, y+ry, PT_CAUS);
 					break;
+				case PT_UNST:
+				  if (RNG::Ref().chance(1, 20) and (parts[i].vx*parts[i].vx + parts[i].vy*parts[i].vy) > 20) {
+				    sim->kill_part(i);
+				    parts[ID(r)].tmp += 1;
+				    parts[ID(r)].life *= 0.9;
+				    return 1;
+				  }
+				  break;
+				//case PT_LAVA:
+				case PT_BRMT:
+				  if (!(parts[ID(r)].ctype == PT_BRYL)){break;}
+        case PT_BRYL:
+          if (!RNG::Ref().chance(1, 3)) {break;}
+				  parts[i].vx *= -0.8;
+				  parts[i].vy *= -0.8;
+          v = RNG::Ref().between(64, 127) * parts[ID(r)].temp / 100000;
+				  a = RNG::Ref().between(0, 359) * 3.14159f / 180.0f;
+				  parts[i].vx += v * cosf(a);
+				  parts[i].vy += v * sinf(a);
+				  break;
 				default:
 					break;
 				}

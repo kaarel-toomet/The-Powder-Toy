@@ -89,5 +89,5 @@ screenshot_*
 *.lproj
 *.opensdf
 *.sdf
+.Rhistory
 /font/
-

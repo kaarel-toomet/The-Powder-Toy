@@ -30,7 +30,7 @@ void Element::Element_PLUT()
 	Weight = 90;
 
 	DefaultProperties.temp = R_TEMP + 4.0f + 273.15f;
-	HeatConduct = 251;
+	HeatConduct = 150;
 	Description = "Plutonium. Heavy, fissile particles. Generates neutrons under pressure.";
 
 	Properties = TYPE_PART|PROP_NEUTPASS|PROP_RADIOACTIVE;
@@ -52,6 +52,11 @@ static int update(UPDATE_FUNC_ARGS)
 	if (RNG::Ref().chance(1, 100) && RNG::Ref().chance(int(5.0f*sim->pv[y/CELL][x/CELL]), 1000))
 	{
 		sim->create_part(i, x, y, PT_NEUT);
+	}
+	if (RNG::Ref().chance(1,4)) {
+	  int a1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ALPH);
+	  parts[a1].temp = parts[i].temp;
+	  parts[i].temp += 2;
 	}
 	return 0;
 }

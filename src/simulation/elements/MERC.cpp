@@ -29,7 +29,7 @@ void Element::Element_MERC()
 	Weight = 91;
 
 	HeatConduct = 251;
-	Description = "Mercury. Volume changes with temperature, Conductive.";
+	Description = "Mercury. Volume changes with temperature, Conductive. Spontneously forms alloys with other metals";
 
 	Properties = TYPE_LIQUID|PROP_CONDUCTS|PROP_NEUTABSORB|PROP_LIFE_DEC;
 
@@ -50,6 +50,46 @@ void Element::Element_MERC()
 static int update(UPDATE_FUNC_ARGS)
 {
 	int r, rx, ry, trade, np;
+  
+  int chance = 20;
+  bool h = 0;
+  
+  for (rx=-1; rx<2; rx++) 
+    for (ry=-1; ry<2; ry++)
+      if (BOUNDS_CHECK && (rx || ry))
+      {
+        r = pmap[y+ry][x+rx];
+        if (!r) {
+          continue;
+        }
+        
+        
+        else if ((TYP(r) == PT_GOLD || TYP(r) == PT_TTAN || TYP(r) == PT_TIN || TYP(r) == PT_GTIN || TYP(r) == PT_LITH || TYP(r) == PT_RBDM || TYP(r) == PT_LRBD) && !h)
+        {
+          chance -= 1;
+          if (TYP(r) != PT_LRBD) {
+            parts[i].vx = 0;
+            parts[i].vy = 0;
+          }
+          if (RNG::Ref().chance(1,chance) and parts[ID(r)].life == 0) {
+            if (TYP(r) == PT_GTIN) {
+              sim->part_change_type(ID(r), x, y, PT_TIN);
+            }
+            parts[ID(r)].x = x;
+            parts[ID(r)].y = y;
+            parts[i].x += rx;
+            parts[i].y += ry;
+            //if (TYP(r) == PT_LITH || TYP(r) == PT_RBDM || TYP(r) == PT_LRBD) {
+            //  parts[i].temp += 3.0f;  // exothermic amalgamation doesn't work well
+            //}
+            h = 1;
+            parts[ID(r)].life = 1;
+          }
+        }
+      }
+      
+      
+  
 	// Max number of particles that can be condensed into one
 	const int absorbScale = 10000;
 	// Obscure division by 0 fix

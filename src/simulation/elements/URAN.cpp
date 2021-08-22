@@ -60,5 +60,12 @@ static int update(UPDATE_FUNC_ARGS)
 			parts[i].temp = restrict_flt((parts[i].temp*(1 + (sim->pv[y / CELL][x / CELL] / 2000))) + MIN_TEMP, MIN_TEMP, MAX_TEMP);
 		}
 	}
+	
+	if (RNG::Ref().chance(1,30)) {
+	  int a1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ALPH);
+	  parts[a1].temp = parts[i].temp;
+	  parts[i].temp += 2;
+	}
+	
 	return 0;
 }
