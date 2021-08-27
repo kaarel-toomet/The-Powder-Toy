@@ -212,14 +212,14 @@ int Element_FIRE_update(UPDATE_FUNC_ARGS)
         
 				if ((rt==PT_COAL) || (rt==PT_BCOL))
 				{
-					if ((t==PT_FIRE || t==PT_PLSM))
-					{
-						if (parts[ID(r)].life>100 && RNG::Ref().chance(1, 500))
-						{
-							parts[ID(r)].life = 99;
-						}
-					}
-					else if (t==PT_LAVA)
+					// if ((t==PT_FIRE || t==PT_PLSM))
+					// {
+					// 	if (parts[ID(r)].life>100 && RNG::Ref().chance(1, 500))
+					// 	{
+					// 		parts[ID(r)].life = 99;
+					// 	}
+					// }
+					if (t==PT_LAVA)
 					{
 						if (parts[i].ctype == PT_IRON && RNG::Ref().chance(1, 500))
 						{

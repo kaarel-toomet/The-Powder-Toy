@@ -30,7 +30,7 @@ void Element::Element_COAL()
 
 	Weight = 100;
 
-	HeatConduct = 200;
+	HeatConduct = 12;
 	Description = "Coal, Burns very slowly. Gets red when hot.";
 
 	Properties = TYPE_SOLID;
@@ -44,7 +44,7 @@ void Element::Element_COAL()
 	HighTemperature = ITH;
 	HighTemperatureTransition = NT;
 
-	DefaultProperties.life = 110;
+	DefaultProperties.life = 100;
 	DefaultProperties.tmp = 50;
 
 	Update = &Element_COAL_update;
@@ -56,22 +56,40 @@ int Element_COAL_update(UPDATE_FUNC_ARGS)
 	if (parts[i].life<=0) {
 		sim->create_part(i, x, y, PT_FIRE);
 		return 1;
-	} else if (parts[i].life < 100) {
-		parts[i].life--;
+	} else if (parts[i].temp > 500 + RNG::Ref().between(-150,1000)) {
+		
 		int f = sim->create_part(-1, x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1), PT_FIRE);
-		parts[i].temp += 20;
-		parts[f].temp = parts[i].temp;
+		//
+		if (f != -1)
+		{
+		  parts[i].life--;
+		  parts[i].temp += 20;
+		  parts[f].temp = parts[i].temp;
+		  if (parts[i].life < 50 && RNG::Ref().chance(1,100) && parts[i].temp > 500) {
+		    sim->pv[y/CELL][x/CELL] += 0.5f * CFDS;
+		    sim->part_change_type(i, x, y, PT_BCOL);
+		    return 1;
+		  }
+		}
 	}
 	if (parts[i].type == PT_COAL)
 	{
-		if ((sim->pv[y/CELL][x/CELL] > 4.3f)&&parts[i].tmp>40)
-			parts[i].tmp=39;
-		else if (parts[i].tmp<40&&parts[i].tmp>0)
-			parts[i].tmp--;
-		else if (parts[i].tmp<=0) {
-			sim->part_change_type(i, x, y, PT_BCOL);
-			return 1;
-		}
+	  parts[i].pavg[0] = parts[i].pavg[1];
+	  parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
+	  float diff = parts[i].pavg[1] - parts[i].pavg[0];
+	  if (diff > 0.20f || diff < -0.20f)
+	  {
+	    parts[i].tmp -= (int)diff*20;
+	  }
+	  
+		// if ((sim->pv[y/CELL][x/CELL] > 4.3f)&&parts[i].tmp>40)
+		// 	parts[i].tmp=39;
+		// else if (parts[i].tmp<40&&parts[i].tmp>0)
+		// 	parts[i].tmp--;
+		if (parts[i].tmp<=0) {
+		  sim->part_change_type(i, x, y, PT_BCOL);
+		  return 1;
+	  }
 	}
 	if(parts[i].temp > parts[i].tmp2)
 		parts[i].tmp2 = int(parts[i].temp);
