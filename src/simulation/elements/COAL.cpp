@@ -50,6 +50,7 @@ void Element::Element_COAL()
 
 	Update = &Element_COAL_update;
 	Graphics = &Element_COAL_graphics;
+	Create = &create;
 }
 
 int Element_COAL_update(UPDATE_FUNC_ARGS)
