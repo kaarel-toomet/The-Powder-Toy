@@ -17,7 +17,7 @@ void Element::Element_FIRE()
 
 	Advection = 0.9f;
 	AirDrag = 0.04f * CFDS;
-	AirLoss = 0.97f;
+	AirLoss = 0.99f;
 	Loss = 0.20f;
 	Collision = 0.0f;
 	Gravity = -0.1f;
@@ -304,11 +304,13 @@ int Element_FIRE_update(UPDATE_FUNC_ARGS)
 				    (rt != PT_SPNG || parts[ID(r)].life == 0))
 				{
 					sim->part_change_type(ID(r), x+rx, y+ry, PT_FIRE);
-					parts[ID(r)].temp = restrict_flt(sim->elements[PT_FIRE].DefaultProperties.temp + (sim->elements[rt].Flammable/2), MIN_TEMP, MAX_TEMP);
+					//parts[ID(r)].temp = restrict_flt(sim->elements[PT_FIRE].DefaultProperties.temp + (sim->elements[rt].Flammable/2), MIN_TEMP, MAX_TEMP);
+					parts[ID(r)].temp = restrict_flt(parts[ID(r)].temp + 500 + (sim->elements[rt].Flammable/2), MIN_TEMP, MAX_TEMP);
 					parts[ID(r)].life = RNG::Ref().between(180, 259);
 					parts[ID(r)].tmp = parts[ID(r)].ctype = 0;
 					if (sim->elements[rt].Explosive)
-						sim->pv[y/CELL][x/CELL] += 0.25f * CFDS;
+						sim->pv[y/CELL][x/CELL] += 1.0f * CFDS;
+					  parts[ID(r)].temp += 100;
 				}
 			}
 	if (sim->legacy_enable && t!=PT_SPRK) // SPRK has no legacy reactions

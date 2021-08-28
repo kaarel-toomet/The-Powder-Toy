@@ -3,6 +3,7 @@
 
 static int update(UPDATE_FUNC_ARGS);
 static int graphics(GRAPHICS_FUNC_ARGS);
+static void create(ELEMENT_CREATE_FUNC_ARGS);
 
 void Element::Element_TUNG()
 {
@@ -46,6 +47,7 @@ void Element::Element_TUNG()
 
 	Update = &update;
 	Graphics = &graphics;
+	Create = &create;
 }
 
 static int update(UPDATE_FUNC_ARGS)
@@ -126,4 +128,9 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 		*pixel_mode |= FIRE_ADD;
 	}
 	return 0;
+}
+
+static void create(ELEMENT_CREATE_FUNC_ARGS)
+{
+  sim->parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
 }

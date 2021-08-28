@@ -3956,7 +3956,7 @@ void Simulation::UpdateParticles(int start, int end)
 						if (t == PT_FIRE)
 						{
 							//hackish, if tmp isn't 0 the FIRE might turn into DSTW later
-							//idealy transitions should use create_part(i) but some elements rely on properties staying constant
+							//ideally transitions should use create_part(i) but some elements rely on properties staying constant
 							//and I don't feel like checking each one right now
 							parts[i].tmp = 0;
 						}
@@ -4059,9 +4059,10 @@ void Simulation::UpdateParticles(int start, int end)
 			{
 				parts[i].life = RNG::Ref().between(180, 259);
 				parts[i].temp = restrict_flt(elements[PT_FIRE].DefaultProperties.temp + (elements[t].Flammable/2), MIN_TEMP, MAX_TEMP);
+				//parts[i].temp = restrict_flt(parts[i].temp + 400 + (elements[t].Flammable/2), MIN_TEMP, MAX_TEMP);
 				t = PT_FIRE;
 				part_change_type(i,x,y,t);
-				pv[y/CELL][x/CELL] += 0.25f * CFDS;
+				pv[y/CELL][x/CELL] += 0.5f * CFDS;
 			}
 
 
