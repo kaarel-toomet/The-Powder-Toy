@@ -1,7 +1,7 @@
 #include "simulation/ElementCommon.h"
 
 static int update(UPDATE_FUNC_ARGS);
-static void create(ELEMENT_CREATE_FUNC_ARGS);
+// static void create(ELEMENT_CREATE_FUNC_ARGS);
 
 void Element::Element_GLAS()
 {
@@ -32,7 +32,7 @@ void Element::Element_GLAS()
 	HeatConduct = 150;
 	Description = "Glass. Meltable. Shatters under pressure, and refracts photons.";
 
-	Properties = TYPE_SOLID | PROP_NEUTPASS | PROP_HOT_GLOW | PROP_SPARKSETTLE;
+	Properties = TYPE_SOLID | PROP_NEUTPASS | PROP_HOT_GLOW | PROP_SPARKSETTLE | PROP_PAVGDP;
 
 	LowPressure = IPL;
 	LowPressureTransition = NT;
@@ -44,13 +44,13 @@ void Element::Element_GLAS()
 	HighTemperatureTransition = PT_LAVA;
 
 	Update = &update;
-	Create = &create;
+	//Create = &create;
 }
 
 static int update(UPDATE_FUNC_ARGS)
 {
-	parts[i].pavg[0] = parts[i].pavg[1];
-	parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
+	// parts[i].pavg[0] = parts[i].pavg[1];
+	// parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
 	float diff = parts[i].pavg[1] - parts[i].pavg[0];
 	if (diff > 0.25f || diff < -0.25f)
 	{
@@ -59,7 +59,7 @@ static int update(UPDATE_FUNC_ARGS)
 	return 0;
 }
 
-static void create(ELEMENT_CREATE_FUNC_ARGS)
-{
-	sim->parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
-}
+// static void create(ELEMENT_CREATE_FUNC_ARGS)
+// {
+// 	sim->parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
+// }

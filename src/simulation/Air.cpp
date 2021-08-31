@@ -37,6 +37,13 @@ void Air::make_kernel(void) //used for velocity
 	for (j=-1; j<2; j++)
 		for (i=-1; i<2; i++)
 			kernel[(i+1)+3*(j+1)] *= s;
+	    
+	    //resulting kernel is approximately:
+	    // 0.01 0.08 0.01
+	    // 0.08 0.62 0.08
+	    // 0.01 0.08 0.01
+	    //s = 0.619347
+	
 }
 
 void Air::Clear()

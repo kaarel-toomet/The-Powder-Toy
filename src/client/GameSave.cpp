@@ -1033,6 +1033,9 @@ void GameSave::readOPS(char * data, int dataLength)
 		unsigned int i = 0;
 		unsigned int saved_x, saved_y, x, y;
 		newIndex = 0;
+		
+		std::vector<Element> elements = GetElements();
+		
 		for (saved_y = 0; saved_y < fullH; saved_y++)
 		{
 			for (saved_x = 0; saved_x < fullW; saved_x++)
@@ -1197,20 +1200,31 @@ void GameSave::readOPS(char * data, int dataLength)
 						pavg |= (((unsigned)partsData[i++]) << 8);
 						particles[newIndex].pavg[1] = (float)pavg;
 
-						switch (particles[newIndex].type)
-						{
+						//switch (particles[newIndex].type)
+						//{
 						// List of elements that save pavg with a multiplicative bias of 2**6
 						// (or not at all if pressure is not saved).
 						// If you change this list, change it in Simulation::Load and GameSave::serialiseOPS too!
-						case PT_QRTZ:
-						case PT_GLAS:
-						case PT_TUNG:
-							if (particles[newIndex].pavg[0] >= 0x8000) particles[newIndex].pavg[0] -= 0x10000;
-							if (particles[newIndex].pavg[1] >= 0x8000) particles[newIndex].pavg[1] -= 0x10000;
-							particles[newIndex].pavg[0] /= 64;
-							particles[newIndex].pavg[1] /= 64;
-							break;
-						}
+						// case PT_QRTZ:
+						// case PT_GLAS:
+						// case PT_TUNG:
+						// case PT_PTST:
+						// case PT_COAL:
+						// case PT_BRCK:
+						// 	if (particles[newIndex].pavg[0] >= 0x8000) particles[newIndex].pavg[0] -= 0x10000;
+						// 	if (particles[newIndex].pavg[1] >= 0x8000) particles[newIndex].pavg[1] -= 0x10000;
+						// 	particles[newIndex].pavg[0] /= 64;
+						// 	particles[newIndex].pavg[1] /= 64;
+						// 	break;
+						// }
+						  if (elements[particles[newIndex].type].Properties & PROP_PAVGDP)
+						  {
+						    if (particles[newIndex].pavg[0] >= 0x8000) particles[newIndex].pavg[0] -= 0x10000;
+						    	if (particles[newIndex].pavg[1] >= 0x8000) particles[newIndex].pavg[1] -= 0x10000;
+						    	particles[newIndex].pavg[0] /= 64;
+						    	particles[newIndex].pavg[1] /= 64;
+						    	//break;
+						  }
 					}
 
 					//Particle specific parsing:
@@ -2057,6 +2071,7 @@ char * GameSave::serialiseOPS(unsigned int & dataLength)
 {
 	int blockX, blockY, blockW, blockH, fullX, fullY, fullW, fullH;
 	int x, y, i;
+	std::vector<Element> elements = GetElements();
 	// minimum version this save is compatible with
 	// when building, this number may be increased depending on what elements are used
 	// or what properties are detected
@@ -2358,28 +2373,39 @@ char * GameSave::serialiseOPS(unsigned int & dataLength)
 				{
 					float pavg0 = particles[i].pavg[0];
 					float pavg1 = particles[i].pavg[1];
-					switch (particles[i].type)
-					{
+					//switch (particles[i].type)
+					//{
 					// List of elements that save pavg with a multiplicative bias of 2**6
 					// (or not at all if pressure is not saved).
 					// If you change this list, change it in Simulation::Load and GameSave::readOPS too!
-					case PT_QRTZ:
-					case PT_GLAS:
-					case PT_TUNG:
-						if (!hasPressure)
-							break;
-						pavg0 *= 64;
-						pavg1 *= 64;
-						// fallthrough!
-
-					default:
-						fieldDesc |= 1 << 13;
-						partsData[partsDataLen++] = (int)pavg0;
-						partsData[partsDataLen++] = ((int)pavg0)>>8;
-						partsData[partsDataLen++] = (int)pavg1;
-						partsData[partsDataLen++] = ((int)pavg1)>>8;
-						break;
+					// case PT_QRTZ:
+					// case PT_GLAS:
+					// case PT_TUNG:
+					// case PT_PTST:
+					// case PT_COAL:
+					// case PT_BRCK:
+					// 	if (!hasPressure)
+					// 		break;
+					// 	pavg0 *= 64;
+					// 	pavg1 *= 64;
+					// 	// fallthrough!
+					
+					if (elements[particles[i].type].Properties & PROP_PAVGDP)
+					{
+					  if (hasPressure)
+					  {
+					     pavg0 *= 64;
+					     pavg1 *= 64;
+					     // fallthrough!
+					  }
 					}
+					fieldDesc |= 1 << 13;
+					partsData[partsDataLen++] = (int)pavg0;
+					partsData[partsDataLen++] = ((int)pavg0)>>8;
+					partsData[partsDataLen++] = (int)pavg1;
+					partsData[partsDataLen++] = ((int)pavg1)>>8;
+					//break;
+					//}
 				}
 
 				//Write the field descriptor

@@ -33,7 +33,7 @@ void Element::Element_QRTZ()
 	HeatConduct = 3;
 	Description = "Quartz, breakable mineral. Conducts but becomes brittle at lower temperatures.";
 
-	Properties = TYPE_SOLID|PROP_HOT_GLOW|PROP_LIFE_DEC;
+	Properties = TYPE_SOLID|PROP_HOT_GLOW|PROP_LIFE_DEC|PROP_PAVGDP;
 
 	LowPressure = IPL;
 	LowPressureTransition = NT;
@@ -54,8 +54,8 @@ int Element_QRTZ_update(UPDATE_FUNC_ARGS)
 	int r, tmp, trade, rx, ry, np, t = parts[i].type;
 	if (t == PT_QRTZ)
 	{
-		parts[i].pavg[0] = parts[i].pavg[1];
-		parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
+		// parts[i].pavg[0] = parts[i].pavg[1];
+		// parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
 		if (parts[i].pavg[1]-parts[i].pavg[0] > 0.05*(parts[i].temp/3) || parts[i].pavg[1]-parts[i].pavg[0] < -0.05*(parts[i].temp/3))
 		{
 			sim->part_change_type(i,x,y,PT_PQRT);
@@ -160,5 +160,5 @@ int Element_QRTZ_graphics(GRAPHICS_FUNC_ARGS)
 static void create(ELEMENT_CREATE_FUNC_ARGS)
 {
 	sim->parts[i].tmp2 = RNG::Ref().between(0, 10);
-	sim->parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
+	// sim->parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
 }

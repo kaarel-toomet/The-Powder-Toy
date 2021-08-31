@@ -3,7 +3,7 @@
 
 static int update(UPDATE_FUNC_ARGS);
 static int graphics(GRAPHICS_FUNC_ARGS);
-static void create(ELEMENT_CREATE_FUNC_ARGS);
+// static void create(ELEMENT_CREATE_FUNC_ARGS);
 
 void Element::Element_TUNG()
 {
@@ -34,7 +34,7 @@ void Element::Element_TUNG()
 	HeatConduct = 251;
 	Description = "Tungsten. Brittle metal with a very high melting point.";
 
-	Properties = TYPE_SOLID|PROP_CONDUCTS|PROP_LIFE_DEC;
+	Properties = TYPE_SOLID|PROP_CONDUCTS|PROP_LIFE_DEC|PROP_PAVGDP;
 
 	LowPressure = IPL;
 	LowPressureTransition = NT;
@@ -47,7 +47,7 @@ void Element::Element_TUNG()
 
 	Update = &update;
 	Graphics = &graphics;
-	Create = &create;
+	// Create = &create;
 }
 
 static int update(UPDATE_FUNC_ARGS)
@@ -95,8 +95,8 @@ static int update(UPDATE_FUNC_ARGS)
 		parts[i].vy += RNG::Ref().between(-50, 50);
 		return 1;
 	}
-	parts[i].pavg[0] = parts[i].pavg[1];
-	parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
+	// parts[i].pavg[0] = parts[i].pavg[1];
+	// parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
 	float diff = parts[i].pavg[1] - parts[i].pavg[0];
 	if (diff > 0.50f || diff < -0.50f)
 	{
@@ -130,7 +130,7 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 	return 0;
 }
 
-static void create(ELEMENT_CREATE_FUNC_ARGS)
-{
-  sim->parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
-}
+// static void create(ELEMENT_CREATE_FUNC_ARGS)
+// {
+//   sim->parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
+// }

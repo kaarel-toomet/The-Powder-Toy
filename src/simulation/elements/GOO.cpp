@@ -32,7 +32,7 @@ void Element::Element_GOO()
 	HeatConduct = 75;
 	Description = "Deforms and disappears under pressure.";
 
-	Properties = TYPE_SOLID | PROP_NEUTPENETRATE|PROP_LIFE_DEC|PROP_LIFE_KILL_DEC;
+	Properties = TYPE_SOLID|PROP_NEUTPENETRATE|PROP_LIFE_DEC|PROP_LIFE_KILL_DEC;
 
 	LowPressure = IPL;
 	LowPressureTransition = NT;
