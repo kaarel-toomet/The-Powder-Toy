@@ -65,8 +65,7 @@ static int update(UPDATE_FUNC_ARGS)
       if (RNG::Ref().chance(1,3)) { // spontaneous fission
         //sim->kill_part(i);
         //sim->create_part(i,x,y,PT_LAVA);
-        parts[i].tmp = (int)((2.0f/3.0f)*parts[i].tmp)+1;
-        parts[i].life = parts[i].life * 0.3 + RNG::Ref().between(1,20);
+        
         int n1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_NEUT);
         int n2 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_NEUT);
         int n3 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_NEUT);
@@ -74,9 +73,14 @@ static int update(UPDATE_FUNC_ARGS)
         parts[n2].temp = parts[i].temp+100;
         parts[n3].temp = parts[i].temp+100;
         
+        
+        float ratio = (float)RNG::Ref().between(30,36) / 100.0f;
+        parts[i].tmp = (int)((1.0f - ratio)*parts[i].tmp);
+        parts[i].life = parts[i].life * 0.3 + RNG::Ref().between(1,20);
+        
         int f2 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_UNST);
         parts[f2].temp = parts[i].temp+100;
-        parts[f2].tmp = (int)(parts[i].tmp / 3.0f);
+        parts[f2].tmp = (int)(parts[i].tmp * ratio);
         parts[f2].life = parts[i].life * 0.2 + RNG::Ref().between(1,20);
         
         sim->pv[y/CELL][x/CELL] += 5.0f * CFDS;
@@ -86,6 +90,19 @@ static int update(UPDATE_FUNC_ARGS)
         parts[a1].temp = parts[i].temp+20;
       }
     }
+    
+    
+    else if (parts[i].tmp > 251 && RNG::Ref().chance(2,3)) {
+      //sim->kill_part(i);
+      sim->create_part(i,x,y,PT_CALI);
+      int a1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ALPH);
+      int e2 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
+      int e3 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
+      parts[a1].temp = parts[i].temp+20;
+      parts[e2].temp = parts[i].temp+20;
+      parts[e3].temp = parts[i].temp+20;
+    }
+    
     else if (parts[i].tmp > 238 && RNG::Ref().chance(2,3)) {
       //sim->kill_part(i);
       sim->create_part(i,x,y,PT_PLUT);
@@ -96,6 +113,7 @@ static int update(UPDATE_FUNC_ARGS)
       parts[e2].temp = parts[i].temp+20;
       parts[e3].temp = parts[i].temp+20;
     }
+    
     else if (parts[i].tmp > 232 && RNG::Ref().chance(2,3)) {
       //sim->kill_part(i);
       sim->create_part(i,x,y,PT_URAN);
@@ -106,6 +124,7 @@ static int update(UPDATE_FUNC_ARGS)
       parts[e2].temp = parts[i].temp+20;
       parts[e3].temp = parts[i].temp+20;
     }
+    
     else if (parts[i].tmp > 225 && RNG::Ref().chance(9,10)) {
       //sim->kill_part(i);
       sim->create_part(i,x,y,PT_THOR);
@@ -116,6 +135,7 @@ static int update(UPDATE_FUNC_ARGS)
       parts[e2].temp = parts[i].temp+20;
       parts[e3].temp = parts[i].temp+20;
     }
+    
     else if (parts[i].tmp > 210 && RNG::Ref().chance(8,10)) {
       //sim->kill_part(i);
       sim->create_part(i,x,y,PT_POLO);
@@ -132,6 +152,7 @@ static int update(UPDATE_FUNC_ARGS)
       if (RNG::Ref().chance(1,3)) {sim->create_part(i,x,y,PT_MERC);}
       else if (RNG::Ref().chance(1,2)) {sim->create_part(i,x,y,PT_GOLD);}
       else {sim->create_part(i,x,y,PT_PTNM);}
+      parts[i].life = 200;
       int a1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ALPH);
       int e2 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       int e3 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
@@ -154,7 +175,7 @@ static int update(UPDATE_FUNC_ARGS)
     else if (parts[i].tmp > 111 && RNG::Ref().chance(7,10)) { 
       //sim->kill_part(i);
       sim->create_part(i,x,y,PT_TIN);
-      
+      parts[i].life = 200;
       int e1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       int e2 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       int e3 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
@@ -165,6 +186,7 @@ static int update(UPDATE_FUNC_ARGS)
     else if (parts[i].tmp > 80 && RNG::Ref().chance(5,10)) {
       //sim->kill_part(i);
       sim->create_part(i,x,y,PT_RBDM);
+      parts[i].life = 200;
       int e1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       int e2 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       int e3 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
@@ -175,6 +197,7 @@ static int update(UPDATE_FUNC_ARGS)
     else if (parts[i].tmp > 69 && RNG::Ref().chance(5,10)) { // NTCT = germanium?
       //sim->kill_part(i);
       sim->create_part(i,x,y,PT_NTCT);
+      parts[i].life = 200;
       int e1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       int e2 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       int e3 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
@@ -185,6 +208,7 @@ static int update(UPDATE_FUNC_ARGS)
     else if (parts[i].tmp > 52 && RNG::Ref().chance(8,10)) {
       //sim->kill_part(i);
       sim->create_part(i,x,y,PT_IRON);
+      parts[i].life = 200;
       int e1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       int e2 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       int e3 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
@@ -195,6 +219,7 @@ static int update(UPDATE_FUNC_ARGS)
     else if (parts[i].tmp > 45 && RNG::Ref().chance(8,10)) {
       //sim->kill_part(i);
       sim->create_part(i,x,y,PT_TTAN);
+      parts[i].life = 200;
       int e1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       int e2 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       int e3 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
@@ -214,8 +239,9 @@ static int update(UPDATE_FUNC_ARGS)
     //   parts[e3].temp = parts[i].temp+20;
     // }
     else if (parts[i].tmp > 27 && RNG::Ref().chance(9,10)) {
-      //sim->kill_part(i);
+      //sim->kill_part(i);;
       sim->create_part(i,x,y,PT_SLCN);
+      parts[i].life = 200;
       int e1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       int e2 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       int e3 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
@@ -224,14 +250,15 @@ static int update(UPDATE_FUNC_ARGS)
       parts[e3].temp = parts[i].temp+20;
     }
     else if (parts[i].tmp > 27 && RNG::Ref().chance(8,10)) {
-        //sim->kill_part(i);
-        sim->create_part(i,x,y,PT_O2);
-        int e1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
-        int e2 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
-        int e3 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
-        parts[e1].temp = parts[i].temp+20;
-        parts[e2].temp = parts[i].temp+20;
-        parts[e3].temp = parts[i].temp+20;
+      //sim->kill_part(i);
+      sim->create_part(i,x,y,PT_O2);
+      parts[i].life = 200;
+      int e1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
+      int e2 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
+      int e3 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
+      parts[e1].temp = parts[i].temp+20;
+      parts[e2].temp = parts[i].temp+20;
+      parts[e3].temp = parts[i].temp+20;
     }
     else if (parts[i].tmp > 11 && RNG::Ref().chance(9,10)) {
       //sim->kill_part(i);
@@ -246,6 +273,7 @@ static int update(UPDATE_FUNC_ARGS)
     else if (parts[i].tmp > 5 && RNG::Ref().chance(1,2)) {
       //sim->kill_part(i);
       sim->create_part(i,x,y,PT_BRYL);
+      parts[i].life = 100;
       int e1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       parts[e1].temp = parts[i].temp+20;
     }
@@ -259,6 +287,7 @@ static int update(UPDATE_FUNC_ARGS)
     else if (parts[i].tmp > 7) {  //alpha-decaying light nuclei
      // sim->kill_part(i);
       sim->create_part(i,x,y,PT_NBLE);
+      parts[i].life = 50;
       int e1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ELEC);
       parts[e1].temp = parts[i].temp+20;
       int a1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ALPH);
