@@ -2,7 +2,7 @@
 
 static int update(UPDATE_FUNC_ARGS);
 static int graphics(GRAPHICS_FUNC_ARGS);
-static void create(ELEMENT_CREATE_FUNC_ARGS);
+// static void create(ELEMENT_CREATE_FUNC_ARGS);
 
 void Element::Element_THOR()
 {
@@ -32,6 +32,7 @@ void Element::Element_THOR()
   Weight = 90;
   
   DefaultProperties.temp = R_TEMP + 2.0f + 273.15f;
+  DefaultProperties.tmp2 = 100;
   HeatConduct = 251;
   Description = "Thorium. Heavy particles with a high melting temperature. Becomes fissile when irradiated by neutrons";
   
@@ -47,7 +48,7 @@ void Element::Element_THOR()
   HighTemperatureTransition = PT_LAVA;
   
   Update = &update;
-  Create = &create;
+  // Create = &create;
   Graphics = &graphics;
 }
 
@@ -72,10 +73,10 @@ static int update(UPDATE_FUNC_ARGS)
  return 0;
 }
 
-static void create(ELEMENT_CREATE_FUNC_ARGS)
-{
-  sim->parts[i].tmp2 = 100;
-}
+// static void create(ELEMENT_CREATE_FUNC_ARGS)
+// {
+//   sim->parts[i].tmp2 = 100;
+// }
 
 static int graphics(GRAPHICS_FUNC_ARGS)
 {

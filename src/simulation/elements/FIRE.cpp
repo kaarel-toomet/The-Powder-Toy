@@ -103,13 +103,17 @@ int Element_FIRE_update(UPDATE_FUNC_ARGS)
 				{
 					if (RNG::Ref().chance(1, 2))
 						parts[i].ctype = PT_BRMT;
+					else if (RNG::Ref().chance(1, 5))
+					  parts[i].ctype = PT_TIN;
 					else
 						parts[i].ctype = PT_CNCT;
 				}
 				else if (pres <= 75)
 				{
-					if (pres >= 73 || RNG::Ref().chance(1, 8))
+					if (pres >= 72 || RNG::Ref().chance(1, 8))
 						parts[i].ctype = PT_GOLD;
+					else if (pres >= 70 || RNG::Ref().chance(1, 8))
+					  parts[i].ctype = PT_MERC;
 					else
 						parts[i].ctype = PT_QRTZ;
 				}
@@ -117,15 +121,20 @@ int Element_FIRE_update(UPDATE_FUNC_ARGS)
 				{
 					if (RNG::Ref().chance(1, 5)) // 1 in 5 chance IRON to TTAN
 						parts[i].ctype = PT_TTAN;
+					else if (pres >= 80 || RNG::Ref().chance(1, 6))
+					  parts[i].ctype = PT_BRYL;
 					else
 						parts[i].ctype = PT_IRON;
 				}
 				else if (parts[i].temp >= 5000 && RNG::Ref().chance(1, 5))
 				{
-					if (RNG::Ref().chance(1, 5))
+					if (RNG::Ref().chance(1, 4))
+					{
+						parts[i].ctype = PT_THOR;
+					  parts[i].tmp2 = 100;
+					}
+					else if (RNG::Ref().chance(1, 6))
 						parts[i].ctype = PT_URAN;
-					else if (RNG::Ref().chance(1, 5))
-						parts[i].ctype = PT_PLUT;
 					else
 						parts[i].ctype = PT_TUNG;
 				}
