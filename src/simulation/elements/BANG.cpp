@@ -85,7 +85,7 @@ static int update(UPDATE_FUNC_ARGS)
 	{
 		float otemp = parts[i].temp-273.15f;
 		//Explode!!
-		sim->pv[y/CELL][x/CELL] += 0.5f;
+		sim->pv[y/CELL][x/CELL] += 2.5f;
 		parts[i].tmp = 0;
 		if (RNG::Ref().chance(1, 3))
 		{

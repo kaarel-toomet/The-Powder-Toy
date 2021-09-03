@@ -3,7 +3,7 @@
 
 static int update(UPDATE_FUNC_ARGS);
 //static int graphics(GRAPHICS_FUNC_ARGS);
-static void create(ELEMENT_CREATE_FUNC_ARGS);
+// static void create(ELEMENT_CREATE_FUNC_ARGS);
 
 void Element::Element_PTST()
 {
@@ -34,7 +34,7 @@ void Element::Element_PTST()
   HeatConduct = 251;
   Description = "Potato steel. Strong but explosive.";
   
-  Properties = TYPE_SOLID | PROP_CONDUCTS | PROP_LIFE_DEC | PROP_HOT_GLOW;
+  Properties = TYPE_SOLID | PROP_CONDUCTS | PROP_LIFE_DEC | PROP_HOT_GLOW | PROP_PAVGDP;
   
   LowPressure = IPL;
   LowPressureTransition = NT;
@@ -47,13 +47,13 @@ void Element::Element_PTST()
   
   Update = &update;
   //Graphics = &graphics;
-  Create = &create;
+  // Create = &create;
 }
 
 static int update(UPDATE_FUNC_ARGS)
 {
-  parts[i].pavg[0] = parts[i].pavg[1];
-  parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
+  // parts[i].pavg[0] = parts[i].pavg[1];
+  // parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
   if (parts[i].pavg[1]-parts[i].pavg[0] > 2.0f)
   {
     //sim->part_change_type(i,x,y,PT_POTA);
@@ -66,8 +66,8 @@ static int update(UPDATE_FUNC_ARGS)
   return 0;
 }
 
-static void create(ELEMENT_CREATE_FUNC_ARGS)
-{
+// static void create(ELEMENT_CREATE_FUNC_ARGS)
+// {
   //sim->parts[i].tmp2 = RNG::Ref().between(0, 10);
-  sim->parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
-}
+  // sim->parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
+// }

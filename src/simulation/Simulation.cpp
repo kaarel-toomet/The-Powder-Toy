@@ -309,15 +309,26 @@ int Simulation::Load(GameSave * save, bool includePressure, int fullX, int fullY
 		// List of elements that load pavg with a multiplicative bias of 2**6
 		// (or not at all if pressure is not loaded).
 		// If you change this list, change it in GameSave::serialiseOPS and GameSave::readOPS too!
-		case PT_QRTZ:
-		case PT_GLAS:
-		case PT_TUNG:
-			if (!includePressure)
-			{
-				parts[i].pavg[0] = 0;
-				parts[i].pavg[1] = 0;
-			}
-			break;
+		// case PT_QRTZ:
+		// case PT_GLAS:
+		// case PT_TUNG:
+		// case PT_PTST:
+		// case PT_COAL:
+		// case PT_BRCK:
+		//   if (!includePressure)
+		//   {
+		//     parts[i].pavg[0] = 0;
+		//     parts[i].pavg[1] = 0;
+		//   }
+		// 	break;
+		default:
+		  if (elements[parts[i].type].Properties & PROP_PAVGDP) {
+		    if (!includePressure)
+		    {
+		      parts[i].pavg[0] = 0;
+		      parts[i].pavg[1] = 0;
+		    }
+		  }
 		}
 	}
 	parts_lastActiveIndex = NPART-1;
@@ -1748,7 +1759,8 @@ int Simulation::CreateParts(int x, int y, int rx, int ry, int c, int flags)
 			newtmp = 300;
 		c = PMAP(newtmp, c);
 	}
-
+  
+  
 	for (int j = -ry; j <= ry; j++)
 		for (int i = -rx; i <= rx; i++)
 			if (CreatePartFlags(x+i, y+j, c, flags))
@@ -2509,7 +2521,7 @@ void Simulation::init_can_move()
 	can_move[PT_EMBR][PT_EMBR] = 2;
 	can_move[PT_TRON][PT_SWCH] = 3;
 	
-	can_move[PT_ALPH][PT_BRMT] = 3;
+	can_move[PT_ALPH][PT_BRMT] = 3; //Varies according to ctype
 	can_move[PT_NEUT][PT_BRMT] = 3;
 	can_move[PT_NEUT][PT_LAVA] = 3;
 }
@@ -3314,6 +3326,10 @@ int Simulation::create_part(int p, int x, int y, int t, int v)
 	else if (t!=PT_STKM && t!=PT_STKM2 && t!=PT_FIGH)
 		pmap[y][x] = PMAP(i, t);
 
+	if (elements[t].Properties&PROP_PAVGDP) {
+	  parts[i].pavg[1] = pv[y/CELL][x/CELL];
+	}
+	
 	//Fancy dust effects for powder types
 	if((elements[t].Properties & TYPE_PART) && pretty_powder)
 	{
@@ -4058,11 +4074,17 @@ void Simulation::UpdateParticles(int start, int end)
 			if ((elements[t].Explosive&2) && pv[y/CELL][x/CELL]>2.5f)
 			{
 				parts[i].life = RNG::Ref().between(180, 259);
-				parts[i].temp = restrict_flt(elements[PT_FIRE].DefaultProperties.temp + (elements[t].Flammable/2), MIN_TEMP, MAX_TEMP);
-				//parts[i].temp = restrict_flt(parts[i].temp + 400 + (elements[t].Flammable/2), MIN_TEMP, MAX_TEMP);
+				//parts[i].temp = restrict_flt(elements[PT_FIRE].DefaultProperties.temp + (elements[t].Flammable/2), MIN_TEMP, MAX_TEMP);
+				parts[i].temp = restrict_flt(parts[i].temp + 400 + (elements[t].Flammable/2), MIN_TEMP, MAX_TEMP);
 				t = PT_FIRE;
 				part_change_type(i,x,y,t);
 				pv[y/CELL][x/CELL] += 0.5f * CFDS;
+			}
+			
+			if (elements[t].Properties&PROP_PAVGDP) // Pressure change, used for breakables, e.g. GLAS
+			{
+			  parts[i].pavg[0] = parts[i].pavg[1];
+			  parts[i].pavg[1] = pv[y/CELL][x/CELL];
 			}
 
 

@@ -44,7 +44,7 @@ void Element::Element_BCOL()
 	HighTemperature = ITH;
 	HighTemperatureTransition = NT;
 
-	DefaultProperties.life = 110;
+	DefaultProperties.life = 80;
 
 	Update = &Element_COAL_update;
 	Graphics = &Element_COAL_graphics;
