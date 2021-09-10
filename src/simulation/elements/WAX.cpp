@@ -39,4 +39,7 @@ void Element::Element_WAX()
 	LowTemperatureTransition = NT;
 	HighTemperature = 319.0f;
 	HighTemperatureTransition = PT_MWAX;
+	
+	DefaultProperties.tmp = 20;
+	
 }

@@ -22,7 +22,7 @@ void Element::Element_BRYL()
   HotAir = 0.000f	* CFDS;
   Falldown = 0;
   
-  Flammable = 0;
+  Flammable = 1;
   Explosive = 0;
   Meltable = 1;
   Hardness = 1;
@@ -42,6 +42,8 @@ void Element::Element_BRYL()
   LowTemperatureTransition = NT;
   HighTemperature = 1560.0f;
   HighTemperatureTransition = PT_LAVA;
+  
+  DefaultProperties.tmp = 5;
   
   Update = &update;
   // Create = &create;

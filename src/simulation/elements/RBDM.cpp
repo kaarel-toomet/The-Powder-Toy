@@ -19,14 +19,14 @@ void Element::Element_RBDM()
 	HotAir = 0.000f	* CFDS;
 	Falldown = 0;
 
-	Flammable = 1000;
-	Explosive = 1;
+	Flammable = 200;
+	Explosive = 0;
 	Meltable = 50;
 	Hardness = 1;
 
 	Weight = 100;
 
-	HeatConduct = 240;
+	HeatConduct = 200;
 	Description = "Rubidium. Explosive, especially on contact with water. Low melting point.";
 
 	Properties = TYPE_SOLID|PROP_CONDUCTS|PROP_LIFE_DEC;
@@ -39,4 +39,6 @@ void Element::Element_RBDM()
 	LowTemperatureTransition = NT;
 	HighTemperature = 312.0f;
 	HighTemperatureTransition = PT_LRBD;
+	
+	DefaultProperties.tmp = 10;
 }

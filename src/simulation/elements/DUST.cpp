@@ -27,7 +27,7 @@ void Element::Element_DUST()
 
 	Weight = 85;
 
-	HeatConduct = 70;
+	HeatConduct = 50;
 	Description = "Very light dust. Flammable.";
 
 	Properties = TYPE_PART;
@@ -40,6 +40,8 @@ void Element::Element_DUST()
 	LowTemperatureTransition = NT;
 	HighTemperature = ITH;
 	HighTemperatureTransition = NT;
+	
+	DefaultProperties.tmp = 5;
 
 	Graphics = NULL; // it this needed?
 }

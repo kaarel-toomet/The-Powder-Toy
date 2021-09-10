@@ -65,9 +65,13 @@ static int update(UPDATE_FUNC_ARGS)
 				}
 				else if ((TYP(r)==PT_RBDM||TYP(r)==PT_LRBD) && (sim->legacy_enable||parts[i].temp>(273.15f+12.0f)) && RNG::Ref().chance(1, 100))
 				{
+				  parts[ID(r)].temp += 10000;
+				  //parts[i].temp += 5000;
+				  parts[ID(r)].tmp -= 1;
 					sim->part_change_type(i,x,y,PT_FIRE);
 					parts[i].life = 4;
 					parts[i].ctype = PT_WATR;
+					sim->pv[y/CELL][x/CELL] += 0.25f * CFDS;
 				}
 				else if (TYP(r)==PT_FIRE && parts[ID(r)].ctype!=PT_WATR)
 				{

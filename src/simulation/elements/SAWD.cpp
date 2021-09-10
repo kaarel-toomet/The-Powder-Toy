@@ -39,6 +39,8 @@ void Element::Element_SAWD()
 	LowTemperatureTransition = NT;
 	HighTemperature = ITH;
 	HighTemperatureTransition = NT;
+	
+	DefaultProperties.tmp = 10;
 
 	Graphics = NULL; // is this needed?
 }

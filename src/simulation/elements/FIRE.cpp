@@ -305,22 +305,46 @@ int Element_FIRE_update(UPDATE_FUNC_ARGS)
 					}
 				}
 
-				if ((surround_space || sim->elements[rt].Explosive) &&
+				if ((surround_space || sim->elements[rt].Explosive) &&    // new combustion code is in simulation.cpp
 				    sim->elements[rt].Flammable && RNG::Ref().chance(int(sim->elements[rt].Flammable + (sim->pv[(y+ry)/CELL][(x+rx)/CELL] * 10.0f)), 1000) &&
 				    //exceptions, t is the thing causing the spark and rt is what's burning
 				    (t != PT_SPRK || (rt != PT_RBDM && rt != PT_LRBD && rt != PT_INSL)) &&
 				    (t != PT_PHOT || rt != PT_INSL) &&
 				    (rt != PT_SPNG || parts[ID(r)].life == 0))
 				{
-					sim->part_change_type(ID(r), x+rx, y+ry, PT_FIRE);
-					//parts[ID(r)].temp = restrict_flt(sim->elements[PT_FIRE].DefaultProperties.temp + (sim->elements[rt].Flammable/2), MIN_TEMP, MAX_TEMP);
-					parts[ID(r)].temp = restrict_flt(parts[ID(r)].temp + 500 + (sim->elements[rt].Flammable/2), MIN_TEMP, MAX_TEMP);
-					parts[ID(r)].life = RNG::Ref().between(180, 259);
-					parts[ID(r)].tmp = parts[ID(r)].ctype = 0;
-					if (sim->elements[rt].Explosive)
-						sim->pv[y/CELL][x/CELL] += 0.5f * CFDS;
-					  parts[ID(r)].temp += 100;
+				  if (sim->elements[rt].Explosive) 
+				  {
+				    sim->pv[y/CELL][x/CELL] += 0.5f * CFDS;
+				    sim->part_change_type(ID(r), x+rx, y+ry, PT_FIRE);
+				    parts[ID(r)].temp = restrict_flt(parts[ID(r)].temp + 500 + (sim->elements[rt].Flammable/2), MIN_TEMP, MAX_TEMP);
+				    parts[ID(r)].life = RNG::Ref().between(180, 259);
+				    parts[ID(r)].tmp = parts[ID(r)].ctype = 0;
+				  }
+				//   else if (parts[i].life <= 0)
+				//   {
+				// 	sim->part_change_type(ID(r), x+rx, y+ry, PT_FIRE);
+				// 	//parts[ID(r)].temp = restrict_flt(sim->elements[PT_FIRE].DefaultProperties.temp + (sim->elements[rt].Flammable/2), MIN_TEMP, MAX_TEMP);
+				// 	parts[ID(r)].temp = restrict_flt(parts[ID(r)].temp + 400 + (sim->elements[rt].Flammable/2), MIN_TEMP, MAX_TEMP);
+				// 	parts[ID(r)].life = RNG::Ref().between(180, 259);
+				// 	parts[ID(r)].tmp = parts[ID(r)].ctype = 0;
+				//   }
+				//   else if (parts[i].temp > 500 + RNG::Ref().between(-150,1000) || parts[ID(r)].temp > 500 + RNG::Ref().between(-150,1000))
+				//   {
+				//     
+				//     int f = sim->create_part(-1, x+rx + RNG::Ref().between(-1, 1), y+ry + RNG::Ref().between(-1, 1), PT_FIRE);
+				//     
+				//     if (f != -1)
+				//     {
+				//       parts[i].life--;
+				//       parts[i].temp += 2 + sim->elements[rt].Flammable;
+				//       parts[f].temp = parts[i].temp;
+				//       //if (parts[i].life < 50 && RNG::Ref().chance(1,100) && parts[i].temp > 500) {
+				//       //  sim->pv[y/CELL][x/CELL] += 0.25f * CFDS;
+				//       //}
+				//     }
+				// 	}
 				}
+				
 			}
 	if (sim->legacy_enable && t!=PT_SPRK) // SPRK has no legacy reactions
 		updateLegacy(UPDATE_FUNC_SUBCALL_ARGS);

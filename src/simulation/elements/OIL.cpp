@@ -19,7 +19,7 @@ void Element::Element_OIL()
 	HotAir = 0.000f	* CFDS;
 	Falldown = 2;
 
-	Flammable = 20;
+	Flammable = 50;
 	Explosive = 0;
 	Meltable = 0;
 	Hardness = 5;
@@ -39,4 +39,6 @@ void Element::Element_OIL()
 	LowTemperatureTransition = NT;
 	HighTemperature = 333.0f;
 	HighTemperatureTransition = PT_GAS;
+	
+	DefaultProperties.tmp = 20;
 }

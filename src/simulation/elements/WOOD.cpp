@@ -42,7 +42,9 @@ void Element::Element_WOOD()
 	LowTemperature = ITL;
 	LowTemperatureTransition = NT;
 	HighTemperature = 873.0f;
-	HighTemperatureTransition = PT_FIRE;
+	HighTemperatureTransition = NT; // turning into COAL done in update function, temp stored here
+	
+	DefaultProperties.tmp = 50;
 
 	Update = &update;
 	Graphics = &graphics;
@@ -50,8 +52,14 @@ void Element::Element_WOOD()
 
 static int update(UPDATE_FUNC_ARGS)
 {
-	if (parts[i].temp > 450 && parts[i].temp > parts[i].tmp)
-		parts[i].tmp = (int)parts[i].temp;
+	if (parts[i].temp > 450 && parts[i].temp > parts[i].tmp2)
+		parts[i].tmp2 = (int)parts[i].temp;
+	if (parts[i].temp > sim->elements[PT_WOOD].HighTemperature + RNG::Ref().between(0,200) && RNG::Ref().chance(1,50))
+	{
+	  sim->part_change_type(i, x, y, PT_COAL);
+	  parts[i].life = parts[i].tmp;
+	}
+	  
 
 	if (parts[i].temp > 773.0f && sim->pv[y/CELL][x/CELL] <= -10.0f)
 	{
@@ -65,7 +73,7 @@ static int update(UPDATE_FUNC_ARGS)
 
 static int graphics(GRAPHICS_FUNC_ARGS)
 {
-	float maxtemp = std::max((float)cpart->tmp, cpart->temp);
+	float maxtemp = std::max((float)cpart->tmp2, cpart->temp);
 	if (maxtemp > 400)
 	{
 		*colr -= (int)restrict_flt((maxtemp-400)/3,0,172);

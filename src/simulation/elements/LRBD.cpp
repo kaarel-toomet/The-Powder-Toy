@@ -19,8 +19,8 @@ void Element::Element_LRBD()
 	HotAir = 0.000001f* CFDS;
 	Falldown = 2;
 
-	Flammable = 1000;
-	Explosive = 1;
+	Flammable = 200;
+	Explosive = 0;
 	Meltable = 0;
 	Hardness = 2;
 
@@ -30,7 +30,7 @@ void Element::Element_LRBD()
 	HeatConduct = 170;
 	Description = "Liquid Rubidium.";
 
-	Properties = TYPE_LIQUID|PROP_CONDUCTS|PROP_LIFE_DEC;
+	Properties = TYPE_LIQUID|PROP_CONDUCTS|PROP_LIFE_DEC|PROP_HOT_GLOW;
 
 	LowPressure = IPL;
 	LowPressureTransition = NT;
@@ -38,6 +38,8 @@ void Element::Element_LRBD()
 	HighPressureTransition = NT;
 	LowTemperature = 311.0f;
 	LowTemperatureTransition = PT_RBDM;
-	HighTemperature = 961.0f;
-	HighTemperatureTransition = PT_FIRE;
+	HighTemperature = 1648.0f;
+	HighTemperatureTransition = NT;
+	
+	DefaultProperties.tmp = 10;
 }

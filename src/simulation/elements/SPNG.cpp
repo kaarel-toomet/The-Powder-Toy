@@ -43,6 +43,8 @@ void Element::Element_SPNG()
 	HighTemperature = 2730.0f;
 	HighTemperatureTransition = PT_FIRE;
 
+	DefaultProperties.tmp = 20;
+	
 	Update = &update;
 	Graphics = &graphics;
 }

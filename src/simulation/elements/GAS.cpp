@@ -19,7 +19,7 @@ void Element::Element_GAS()
 	HotAir = 0.001f	* CFDS;
 	Falldown = 0;
 
-	Flammable = 600;
+	Flammable = 75;
 	Explosive = 0;
 	Meltable = 0;
 	Hardness = 1;
@@ -40,4 +40,6 @@ void Element::Element_GAS()
 	LowTemperatureTransition = NT;
 	HighTemperature = 573.0f;
 	HighTemperatureTransition = PT_FIRE;
+	
+	DefaultProperties.tmp = 5;
 }

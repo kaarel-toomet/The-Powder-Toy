@@ -4081,7 +4081,49 @@ void Simulation::UpdateParticles(int start, int end)
 				pv[y/CELL][x/CELL] += 0.5f * CFDS;
 			}
 			
-			if (elements[t].Properties&PROP_PAVGDP) // Pressure change, used for breakables, e.g. GLAS
+			
+			if ((elements[t].Flammable || (t == PT_LAVA || elements[parts[i].ctype].Flammable)) && surround_space) // combustion (the old system is very unrealistic)
+			{
+			  int flammable = elements[t].Flammable;
+			  int type = t;
+			  
+			  if (t == PT_LAVA) {flammable = elements[parts[i].ctype].Flammable; type = parts[i].ctype;}
+			  
+			  float burntemp = 900 - flammable*5;
+			  float trange = 500;
+			  float fireheat = flammable;
+			  
+			  if (type == PT_GUNP) {burntemp = 700;}
+			  if (type == PT_RBDM || type == PT_LRBD) {burntemp = 500; trange = 300;}
+			  if (type == PT_BRYL) {burntemp = 2800; trange = 1200;}
+			  //if (type == PT_GAS) {burntemp = 500; trange = 300;}
+			  
+			  if (parts[i].temp > burntemp + 273.15f + RNG::Ref().between(-trange,trange))
+			  {
+			    if (parts[i].tmp <= 0) {                     // .tmp used because life is used for metals, sponge, etc.
+			      part_change_type(i, x, y, PT_FIRE);
+			      parts[i].temp = restrict_flt(parts[i].temp + fireheat, MIN_TEMP, MAX_TEMP);
+			      parts[i].life = RNG::Ref().between(180, 259);
+			      parts[i].tmp = parts[ID(r)].ctype = 0;
+			      if (parts[i].type == PT_RBDM || parts[i].type == PT_LRBD) {pv[y/CELL][x/CELL] += 0.5f * CFDS;}
+			    }
+			    else
+			    {
+			      int f = create_part(-1, x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1), PT_FIRE);
+			      //
+			      if (f != -1)
+			      {
+			        parts[i].tmp--;
+			        parts[i].temp += fireheat;
+			        parts[f].temp = parts[i].temp;
+			        if (parts[i].life < 50 && RNG::Ref().chance(1,100) && parts[i].temp > 500)
+			          pv[y/CELL][x/CELL] += 0.25f * CFDS;
+			      }
+			    }
+			  }
+			}
+			
+			if (elements[t].Properties&PROP_PAVGDP) // store pressure change, used for breakables, e.g. GLAS
 			{
 			  parts[i].pavg[0] = parts[i].pavg[1];
 			  parts[i].pavg[1] = pv[y/CELL][x/CELL];
