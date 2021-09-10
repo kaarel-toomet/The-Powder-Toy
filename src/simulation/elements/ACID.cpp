@@ -45,6 +45,7 @@ void Element::Element_ACID()
 	HighTemperatureTransition = NT;
 
 	DefaultProperties.life = 75;
+	DefaultProperties.tmp = 20;
 
 	Update = &update;
 	Graphics = &graphics;

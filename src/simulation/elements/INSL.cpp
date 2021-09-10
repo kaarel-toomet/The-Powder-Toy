@@ -19,7 +19,7 @@ void Element::Element_INSL()
 	HotAir = 0.000f	* CFDS;
 	Falldown = 0;
 
-	Flammable = 7;
+	Flammable = 50;  // high because it doesn't transfer heat but has to burn
 	Explosive = 0;
 	Meltable = 0;
 	Hardness = 10;
@@ -39,4 +39,6 @@ void Element::Element_INSL()
 	LowTemperatureTransition = NT;
 	HighTemperature = ITH;
 	HighTemperatureTransition = NT;
+	
+	DefaultProperties.tmp = 1;
 }

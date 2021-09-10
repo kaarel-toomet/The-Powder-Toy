@@ -54,6 +54,7 @@ static int update(UPDATE_FUNC_ARGS)
 {
 	if (parts[i].temp > 450 && parts[i].temp > parts[i].tmp2)
 		parts[i].tmp2 = (int)parts[i].temp;
+	
 	if (parts[i].temp > sim->elements[PT_WOOD].HighTemperature + RNG::Ref().between(0,200) && RNG::Ref().chance(1,50))
 	{
 	  sim->part_change_type(i, x, y, PT_COAL);

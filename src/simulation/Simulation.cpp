@@ -4086,6 +4086,19 @@ void Simulation::UpdateParticles(int start, int end)
 			{
 			  int flammable = elements[t].Flammable;
 			  int type = t;
+			  float temp = parts[i].temp;
+			  
+			  if (RNG::Ref().chance(1,2)) {
+			    int rx = RNG::Ref().between(-2,2);
+			    int ry = RNG::Ref().between(-2,2);
+			    
+			    if (BOUNDS_CHECK && (rx || ry))
+			    {
+			      int r = pmap[y+ry][x+rx];
+			      if (r)
+			        temp = parts[ID(r)].temp;
+			    }
+			  }
 			  
 			  if (t == PT_LAVA) {flammable = elements[parts[i].ctype].Flammable; type = parts[i].ctype;}
 			  
@@ -4096,9 +4109,10 @@ void Simulation::UpdateParticles(int start, int end)
 			  if (type == PT_GUNP) {burntemp = 700;}
 			  if (type == PT_RBDM || type == PT_LRBD) {burntemp = 500; trange = 300;}
 			  if (type == PT_BRYL) {burntemp = 2800; trange = 1200;}
+			  if (type == PT_DESL) {trange = 100; burntemp = 335 - pv[y/CELL][x/CELL]*50;}
 			  //if (type == PT_GAS) {burntemp = 500; trange = 300;}
 			  
-			  if (parts[i].temp > burntemp + 273.15f + RNG::Ref().between(-trange,trange))
+			  if (temp > burntemp + 273.15f + RNG::Ref().between(-trange,trange))
 			  {
 			    if (parts[i].tmp <= 0) {                     // .tmp used because life is used for metals, sponge, etc.
 			      part_change_type(i, x, y, PT_FIRE);

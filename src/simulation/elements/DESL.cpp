@@ -9,7 +9,7 @@ void Element::Element_DESL()
 	MenuSection = SC_LIQUID;
 	Enabled = 1;
 
-	Advection = 1.0f;
+	Advection = 0.5f;
 	AirDrag = 0.01f * CFDS;
 	AirLoss = 0.98f;
 	Loss = 0.95f;
@@ -19,7 +19,7 @@ void Element::Element_DESL()
 	HotAir = 0.0f	* CFDS;
 	Falldown = 2;
 
-	Flammable = 2;
+	Flammable = 50;
 	Explosive = 0;
 	Meltable = 0;
 	Hardness = 5;
@@ -34,9 +34,11 @@ void Element::Element_DESL()
 	LowPressure = IPL;
 	LowPressureTransition = NT;
 	HighPressure = 5.0f;
-	HighPressureTransition = PT_FIRE;
+	HighPressureTransition = NT;
 	LowTemperature = ITL;
 	LowTemperatureTransition = NT;
-	HighTemperature = 335.0f;
-	HighTemperatureTransition = PT_FIRE;
+	HighTemperature = 535.0f;
+	HighTemperatureTransition = NT;
+	
+	DefaultProperties.tmp = 10;
 }
