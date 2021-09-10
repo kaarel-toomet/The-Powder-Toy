@@ -54,6 +54,8 @@ void Element::Element_EXOT()
 static int update(UPDATE_FUNC_ARGS)
 {
 	int r, rt, rx, ry, trade, tym;
+  int num_exot = 0;
+  int dtmp = 0;
 	for (rx=-2; rx<=2; rx++)
 		for (ry=-2; ry<=2; ry++)
 			if (BOUNDS_CHECK && (rx || ry))
@@ -71,6 +73,15 @@ static int update(UPDATE_FUNC_ARGS)
 				}
 				else if (rt == PT_EXOT)
 				{
+				  dtmp += parts[ID(r)].tmp;
+				  num_exot += 1;
+				  // if (RNG::Ref().chance(1,1000))
+				  // {
+				  //   parts[ID(r)].tmp += parts[i].tmp;
+				  //   parts[ID(r)].tmp /= 2;
+				  //   parts[i].tmp = parts[ID(r)].tmp;
+				  // }
+				  
 					if (parts[ID(r)].ctype == PT_PROT)
 						parts[i].ctype = PT_PROT;
 					if (parts[ID(r)].life == 1500 && RNG::Ref().chance(1, 1000))
@@ -107,8 +118,13 @@ static int update(UPDATE_FUNC_ARGS)
 						}
 					}
 			}
-
+  
+  dtmp -= parts[i].tmp*(num_exot);
+	dtmp /= floor(num_exot / 2);
+	//dtmp *= 2;
+  parts[i].tmp += dtmp;
 	parts[i].tmp--;
+	//parts[i].tmp *= 1.02;
 	parts[i].tmp2--;
 	//reset tmp every 250 frames, gives EXOT it's slow flashing effect
 	if (parts[i].tmp < 1 || parts[i].tmp > 250)

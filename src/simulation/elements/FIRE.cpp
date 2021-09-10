@@ -318,7 +318,7 @@ int Element_FIRE_update(UPDATE_FUNC_ARGS)
 					parts[ID(r)].life = RNG::Ref().between(180, 259);
 					parts[ID(r)].tmp = parts[ID(r)].ctype = 0;
 					if (sim->elements[rt].Explosive)
-						sim->pv[y/CELL][x/CELL] += 2.0f * CFDS;
+						sim->pv[y/CELL][x/CELL] += 0.5f * CFDS;
 					  parts[ID(r)].temp += 100;
 				}
 			}

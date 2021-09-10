@@ -17,7 +17,7 @@ void Element::Element_TEST()
   AirDrag = 0.02f * CFDS;
   AirLoss = 0.9f;
   Loss = 1.00f;
-  Collision = 0.0f;
+  Collision = 0.5f;
   Gravity = 0.2f;
   Diffusion = 0.00f;
   HotAir = 0.000f	* CFDS;
@@ -97,7 +97,15 @@ static int update(UPDATE_FUNC_ARGS)
         if (!r) {
           continue;
         }
-        
+        else if (TYP(r) == PT_TEST && RNG::Ref().chance(5,5)) {
+          parts[ID(r)].vx += parts[i].vx;
+          parts[ID(r)].vx /= 2;
+          parts[i].vx = parts[ID(r)].vx;
+          parts[ID(r)].vy += parts[i].vy;
+          parts[ID(r)].vy /= 2;
+          parts[i].vy = parts[ID(r)].vy;
+          
+        }
 
         else if (TYP(r) == PT_GOLD && !h)
         {
