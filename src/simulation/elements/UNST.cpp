@@ -60,10 +60,11 @@ static int update(UPDATE_FUNC_ARGS)
     //decay
     float otemp = parts[i].temp;
     if (parts[i].tmp > 255) {
-      parts[i].tmp -= 4; //alpha decay
       
       
-      if (RNG::Ref().chance(1,3)) { // spontaneous fission
+      
+      if (RNG::Ref().chance(1,3))
+      { // spontaneous fission
         //sim->kill_part(i);
         //sim->create_part(i,x,y,PT_LAVA);
         
@@ -87,6 +88,7 @@ static int update(UPDATE_FUNC_ARGS)
         sim->pv[y/CELL][x/CELL] += 5.0f * CFDS;
       }
       else {
+        parts[i].tmp -= 4; //alpha decay
         int a1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ALPH);
         parts[a1].temp = parts[i].temp+20;
       }

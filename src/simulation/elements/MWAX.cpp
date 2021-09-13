@@ -38,8 +38,8 @@ void Element::Element_MWAX()
 	HighPressureTransition = NT;
 	LowTemperature = 318.0f;
 	LowTemperatureTransition = PT_WAX;
-	HighTemperature = 673.0f;
-	HighTemperatureTransition = PT_FIRE;
+	HighTemperature = 873.0f;
+	HighTemperatureTransition = PT_GAS;
 	
 	DefaultProperties.tmp = 20;
 }

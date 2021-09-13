@@ -9,7 +9,7 @@ void Element::Element_DESL()
 	MenuSection = SC_LIQUID;
 	Enabled = 1;
 
-	Advection = 0.5f;
+	Advection = 1.0f;
 	AirDrag = 0.01f * CFDS;
 	AirLoss = 0.98f;
 	Loss = 0.95f;

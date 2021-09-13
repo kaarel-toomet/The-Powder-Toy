@@ -4082,7 +4082,7 @@ void Simulation::UpdateParticles(int start, int end)
 			}
 			
 			
-			if ((elements[t].Flammable || (t == PT_LAVA || elements[parts[i].ctype].Flammable)) && surround_space) // combustion (the old system is very unrealistic)
+			if ((elements[t].Flammable || (t == PT_LAVA && elements[parts[i].ctype].Flammable)) && surround_space) // combustion (the old system is unrealistic)
 			{
 			  int flammable = elements[t].Flammable;
 			  int type = t;
@@ -4106,7 +4106,7 @@ void Simulation::UpdateParticles(int start, int end)
 			  float trange = 500;
 			  float fireheat = flammable;
 			  
-			  if (type == PT_GUNP) {burntemp = 700;}
+			  if (type == PT_GUNP || type == PT_PLEX || type == PT_NITR) {burntemp = 700;}
 			  if (type == PT_RBDM || type == PT_LRBD) {burntemp = 500; trange = 300;}
 			  if (type == PT_BRYL) {burntemp = 2800; trange = 1200;}
 			  if (type == PT_DESL) {trange = 100; burntemp = 335 - pv[y/CELL][x/CELL]*50;}
@@ -4116,7 +4116,7 @@ void Simulation::UpdateParticles(int start, int end)
 			  {
 			    if (parts[i].tmp <= 0) {                     // .tmp used because life is used for metals, sponge, etc.
 			      part_change_type(i, x, y, PT_FIRE);
-			      parts[i].temp = restrict_flt(parts[i].temp + fireheat, MIN_TEMP, MAX_TEMP);
+			      parts[i].temp = restrict_flt(temp + fireheat, MIN_TEMP, MAX_TEMP);
 			      parts[i].life = RNG::Ref().between(180, 259);
 			      parts[i].tmp = parts[ID(r)].ctype = 0;
 			      if (parts[i].type == PT_RBDM || parts[i].type == PT_LRBD) {pv[y/CELL][x/CELL] += 0.5f * CFDS;}
