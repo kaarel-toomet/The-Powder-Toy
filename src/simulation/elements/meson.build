@@ -202,6 +202,7 @@ simulation_elem_ids = [
 	[ 'GGOO',   200 ],
 	[ 'BRYL',   201 ],
 	[ 'CALI',   202 ],
+	[ 'PDSC',   203 ],
 ]
 
 simulation_elem_src = []

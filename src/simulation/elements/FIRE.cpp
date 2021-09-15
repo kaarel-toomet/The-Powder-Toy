@@ -214,6 +214,12 @@ int Element_FIRE_update(UPDATE_FUNC_ARGS)
               //sim->kill_part(ID(r));
               continue;
             }
+            if (parts[i].ctype == PT_SLCN && RNG::Ref().chance(1, 200))
+            {
+              parts[i].ctype = PT_PDSC;
+              //sim->kill_part(ID(r));
+              continue;
+            }
           }
           
         }

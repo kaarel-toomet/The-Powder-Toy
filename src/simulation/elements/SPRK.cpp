@@ -167,6 +167,11 @@ static int update(UPDATE_FUNC_ARGS)
 		if(parts[i].temp < 3595.0){
 			parts[i].temp += RNG::Ref().between(-4, 15);
 		}
+	case PT_PDSC:
+	  if(RNG::Ref().chance(20,20)){
+	    parts[i].temp += RNG::Ref().between(-2345, 2345);
+	    sim->pv[y/CELL][x/CELL] += RNG::Ref().between(-23, 23);
+	  }
 	default:
 		break;
 	}
