@@ -1,4 +1,5 @@
 #include "simulation/ElementCommon.h"
+#include "simulation/Air.h"
 
 static int update(UPDATE_FUNC_ARGS);
 
@@ -36,7 +37,7 @@ void Element::Element_BMTL()
 	LowPressure = IPL;
 	LowPressureTransition = NT;
 	HighPressure = 1.0f;
-	HighPressureTransition = ST;
+	HighPressureTransition = NT;
 	LowTemperature = ITL;
 	LowTemperatureTransition = NT;
 	HighTemperature = 1273.0f;
@@ -69,6 +70,38 @@ static int update(UPDATE_FUNC_ARGS)
 	{
 		parts[i].tmp = 0;
 		sim->part_change_type(i,x,y,PT_BRMT);
+		
 	}
+	
+	int bmtl = 0;
+	if (nt <= 2)
+	  bmtl = 2;
+	else if (nt <= 6)
+	{
+	  for (int rx = -1; rx <= 1; rx++)
+	    for (int ry = -1; ry <= 1; ry++)
+	      if ((!rx != !ry) && BOUNDS_CHECK)
+	      {
+	        if (TYP(pmap[y+ry][x+rx]) == PT_BMTL)
+	          bmtl++;
+	      }
+	}
+	
+	if (bmtl >= 2)
+	{
+	  sim->air->bmap_blockair[y/CELL][x/CELL] = 1;
+	  sim->air->bmap_blockairh[y/CELL][x/CELL] = 0x8;
+	}
+	
+	
+	float p = sim->pv[y/CELL][x/CELL];
+	float v = abs(sim->pv[y/CELL+1][x/CELL] - p) + abs(sim->pv[y/CELL-1][x/CELL] - p);
+	float h = abs(sim->pv[y/CELL][x/CELL+1] - p) + abs(sim->pv[y/CELL][x/CELL-1] - p);
+	if (h+v > 0.5)
+	  sim->part_change_type(i,x,y,PT_BRMT);
 	return 0;
 }
+
+
+
+

@@ -3537,8 +3537,8 @@ void Simulation::UpdateParticles(int start, int end)
 				set_emap(x/CELL, y/CELL);
 
 			//adding to velocity from the particle's velocity
-			vx[y/CELL][x/CELL] = vx[y/CELL][x/CELL]*elements[t].AirLoss + elements[t].AirDrag*parts[i].vx;
-			vy[y/CELL][x/CELL] = vy[y/CELL][x/CELL]*elements[t].AirLoss + elements[t].AirDrag*parts[i].vy;
+			vx[y/CELL][x/CELL] = vx[y/CELL][x/CELL]*elements[t].AirLoss + elements[t].AirDrag*(parts[i].vx - vx[y/CELL][x/CELL]);
+			vy[y/CELL][x/CELL] = vy[y/CELL][x/CELL]*elements[t].AirLoss + elements[t].AirDrag*(parts[i].vy - vx[y/CELL][x/CELL]);
 
 			if (elements[t].HotAir)
 			{
@@ -3608,8 +3608,8 @@ void Simulation::UpdateParticles(int start, int end)
 				parts[i].vy *= elements[t].Loss;
 			}
 			//particle gets velocity from the vx and vy maps
-			parts[i].vx += elements[t].Advection*vx[y/CELL][x/CELL] + pGravX;
-			parts[i].vy += elements[t].Advection*vy[y/CELL][x/CELL] + pGravY;
+			parts[i].vx += elements[t].Advection*(vx[y/CELL][x/CELL]-parts[i].vx) + pGravX;
+			parts[i].vy += elements[t].Advection*(vy[y/CELL][x/CELL]-parts[i].vx) + pGravY;
 
 
 			if (elements[t].Diffusion)//the random diffusion that gasses have
