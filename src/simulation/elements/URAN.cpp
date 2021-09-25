@@ -13,7 +13,7 @@ void Element::Element_URAN()
 
 	Advection = 0.4f;
 	AirDrag = 0.01f * CFDS;
-	AirLoss = 0.99f;
+	AirLoss = 1.0f;
 	Loss = 0.95f;
 	Collision = 0.0f;
 	Gravity = 0.4f;

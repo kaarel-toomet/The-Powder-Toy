@@ -12,7 +12,7 @@ void Element::Element_DUST()
 	Advection = 0.7f;
 	AirDrag = 0.02f * CFDS;
 	AirLoss = 0.96f;
-	Loss = 0.80f;
+	Loss = 0.90f;
 	Collision = 0.0f;
 	Gravity = 0.1f;
 	Diffusion = 0.00f;

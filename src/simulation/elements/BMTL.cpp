@@ -13,7 +13,7 @@ void Element::Element_BMTL()
 	Enabled = 1;
 
 	Advection = 0.0f;
-	AirDrag = 0.10f * CFDS;
+	AirDrag = 0.0f * CFDS;
 	AirLoss = 1.00f;
 	Loss = 0.00f;
 	Collision = 0.0f;

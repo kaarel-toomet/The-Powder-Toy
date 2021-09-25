@@ -3538,7 +3538,7 @@ void Simulation::UpdateParticles(int start, int end)
 
 			//adding to velocity from the particle's velocity
 			vx[y/CELL][x/CELL] = vx[y/CELL][x/CELL]*elements[t].AirLoss + elements[t].AirDrag*(parts[i].vx - vx[y/CELL][x/CELL]);
-			vy[y/CELL][x/CELL] = vy[y/CELL][x/CELL]*elements[t].AirLoss + elements[t].AirDrag*(parts[i].vy - vx[y/CELL][x/CELL]);
+			vy[y/CELL][x/CELL] = vy[y/CELL][x/CELL]*elements[t].AirLoss + elements[t].AirDrag*(parts[i].vy - vy[y/CELL][x/CELL]);
 
 			if (elements[t].HotAir)
 			{
@@ -4145,7 +4145,7 @@ void Simulation::UpdateParticles(int start, int end)
 			  parts[i].pavg[1] = pv[y/CELL][x/CELL];
 			}
 			
-			if (pblock >= 4) // all solids (except CRMC, not because of realism) block pressure
+			if (pblock >= 6) // all solids (except CRMC, not because of realism) block pressure
 			  {
 			    air->bmap_blockair[y/CELL][x/CELL] = 1;
 			    air->bmap_blockairh[y/CELL][x/CELL] = 0x8;
