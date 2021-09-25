@@ -11,9 +11,9 @@ void Element::Element_BRMT()
 	MenuSection = SC_POWDERS;
 	Enabled = 1;
 
-	Advection = 0.4f;
-	AirDrag = 0.04f * CFDS;
-	AirLoss = 0.94f;
+	Advection = 0.05f;
+	AirDrag = 0.05f * CFDS;
+	AirLoss = 1.0f;
 	Loss = 0.95f;
 	Collision = -0.1f;
 	Gravity = 0.3f;

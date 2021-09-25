@@ -30,7 +30,7 @@
 #define PROP_LIFE_KILL_DEC	0x10000  //2^16 Kill when life value is decremented to <= zero
 #define PROP_SPARKSETTLE	0x20000  //2^17 Allow Sparks/Embers to settle
 #define PROP_NOAMBHEAT		0x40000  //2^18 Don't transfer or receive heat from ambient heat.
-#define PROP_PAVGDP		0x80000  //2^19 Store pressure and old pressure in pavg[1] and pavg[0], respectively
+#define PROP_PAVGDP		0x80000  //2^19 Store pressure and previous pressure in pavg[1] and pavg[0], respectively
 #define PROP_NOCTYPEDRAW	0x100000 // 2^20 When this element is drawn upon with, do not set ctype (like BCLN for CLNE)
 
 #define FLAG_STAGNANT	0x1

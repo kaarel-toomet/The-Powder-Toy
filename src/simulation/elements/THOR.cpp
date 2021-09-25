@@ -68,7 +68,8 @@ static int update(UPDATE_FUNC_ARGS)
  }
  if (RNG::Ref().chance(parts[i].tmp2 + parts[i].tmp*10, 10000)) {
    int a1 = sim->create_part(-1,x + RNG::Ref().between(-1, 1), y + RNG::Ref().between(-1, 1),PT_ALPH);
-   parts[a1].temp = parts[i].temp+2;
+   parts[a1].temp = parts[i].temp;
+   parts[i].temp += 1;
  }
  return 0;
 }

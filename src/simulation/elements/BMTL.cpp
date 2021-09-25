@@ -13,8 +13,8 @@ void Element::Element_BMTL()
 	Enabled = 1;
 
 	Advection = 0.0f;
-	AirDrag = 0.00f * CFDS;
-	AirLoss = 0.90f;
+	AirDrag = 0.10f * CFDS;
+	AirLoss = 1.00f;
 	Loss = 0.00f;
 	Collision = 0.0f;
 	Gravity = 0.0f;
@@ -73,31 +73,31 @@ static int update(UPDATE_FUNC_ARGS)
 		
 	}
 	
-	int bmtl = 0;
-	if (nt <= 2)
-	  bmtl = 2;
-	else if (nt <= 6)
-	{
-	  for (int rx = -1; rx <= 1; rx++)
-	    for (int ry = -1; ry <= 1; ry++)
-	      if ((!rx != !ry) && BOUNDS_CHECK)
-	      {
-	        if (TYP(pmap[y+ry][x+rx]) == PT_BMTL)
-	          bmtl++;
-	      }
-	}
-	
-	if (bmtl >= 2)
-	{
-	  sim->air->bmap_blockair[y/CELL][x/CELL] = 1;
-	  sim->air->bmap_blockairh[y/CELL][x/CELL] = 0x8;
-	}
+	// int bmtl = 0;
+	// if (nt <= 2)
+	//   bmtl = 2;
+	// else if (nt <= 6)
+	// {
+	//   for (int rx = -1; rx <= 1; rx++)
+	//     for (int ry = -1; ry <= 1; ry++)
+	//       if ((!rx != !ry) && BOUNDS_CHECK)
+	//       {
+	//         if (TYP(pmap[y+ry][x+rx]) == PT_BMTL)
+	//           bmtl++;
+	//       }
+	// }
+	// 
+	// if (bmtl >= 2)
+	// {
+	//   sim->air->bmap_blockair[y/CELL][x/CELL] = 1;
+	//   sim->air->bmap_blockairh[y/CELL][x/CELL] = 0x8;
+	// }
 	
 	
 	float p = sim->pv[y/CELL][x/CELL];
-	float v = abs(sim->pv[y/CELL+1][x/CELL] - p) + abs(sim->pv[y/CELL-1][x/CELL] - p);
-	float h = abs(sim->pv[y/CELL][x/CELL+1] - p) + abs(sim->pv[y/CELL][x/CELL-1] - p);
-	if (h+v > 0.5)
+	float v = pow(sim->pv[y/CELL+1][x/CELL] - p,2) + pow(sim->pv[y/CELL-1][x/CELL] - p,2);
+	float h = pow(sim->pv[y/CELL][x/CELL+1] - p,2) + pow(sim->pv[y/CELL][x/CELL-1] - p,2);
+	if (h+v > 1)
 	  sim->part_change_type(i,x,y,PT_BRMT);
 	return 0;
 }

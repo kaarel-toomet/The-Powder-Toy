@@ -3489,7 +3489,7 @@ void Simulation::delete_part(int x, int y)//calls kill_part with the particle lo
 
 void Simulation::UpdateParticles(int start, int end)
 {
-	int i, j, x, y, t, nx, ny, r, surround_space, s, rt, nt;
+	int i, j, x, y, t, nx, ny, r, surround_space, s, rt, nt, pblock;
 	float mv, dx, dy, nrx, nry, dp, ctemph, ctempl, gravtot;
 	int fin_x, fin_y, clear_x, clear_y, stagnant;
 	float fin_xf, fin_yf, clear_xf, clear_yf;
@@ -3609,7 +3609,7 @@ void Simulation::UpdateParticles(int start, int end)
 			}
 			//particle gets velocity from the vx and vy maps
 			parts[i].vx += elements[t].Advection*(vx[y/CELL][x/CELL]-parts[i].vx) + pGravX;
-			parts[i].vy += elements[t].Advection*(vy[y/CELL][x/CELL]-parts[i].vx) + pGravY;
+			parts[i].vy += elements[t].Advection*(vy[y/CELL][x/CELL]-parts[i].vy) + pGravY;
 
 
 			if (elements[t].Diffusion)//the random diffusion that gasses have
@@ -3626,7 +3626,7 @@ void Simulation::UpdateParticles(int start, int end)
 
 			transitionOccurred = false;
 
-			j = surround_space = nt = 0;//if nt is greater than 1 after this, then there is a particle around the current particle, that is NOT the current particle's type, for water movement.
+			j = surround_space = nt = pblock = 0;//if nt is greater than 1 after this, then there is a particle around the current particle, that is NOT the current particle's type, for water movement.
 			for (nx=-1; nx<2; nx++)
 				for (ny=-1; ny<2; ny++) {
 					if (nx||ny) {
@@ -3636,6 +3636,8 @@ void Simulation::UpdateParticles(int start, int end)
 							surround_space++;//there is empty space
 						if (TYP(r)!=t)
 							nt++;//there is nothing or a different particle
+						if (elements[TYP(r)].Properties & TYPE_SOLID && TYP(r) != PT_CRMC)
+						  pblock++;
 					}
 				}
 
@@ -4142,6 +4144,12 @@ void Simulation::UpdateParticles(int start, int end)
 			  parts[i].pavg[0] = parts[i].pavg[1];
 			  parts[i].pavg[1] = pv[y/CELL][x/CELL];
 			}
+			
+			if (pblock >= 4) // all solids (except CRMC, not because of realism) block pressure
+			  {
+			    air->bmap_blockair[y/CELL][x/CELL] = 1;
+			    air->bmap_blockairh[y/CELL][x/CELL] = 0x8;
+			  }
 
 
 			s = 1;
@@ -4835,6 +4843,7 @@ int Simulation::GetParticleType(ByteString type)
 
 void Simulation::RecalcFreeParticles(bool do_life_dec)
 {
+  //t = elements[t].LowPressureTransition;
 	int x, y, t;
 	int lastPartUsed = 0;
 	int lastPartUnused = -1;
