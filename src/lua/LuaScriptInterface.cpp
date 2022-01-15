@@ -158,7 +158,9 @@ LuaScriptInterface::LuaScriptInterface(GameController * c, GameModel * m):
 	initPlatformAPI();
 	initEventAPI();
 	initHttpAPI();
+#ifndef NOHTTP
 	initSocketAPI();
+#endif
 
 	//Old TPT API
 	int currentElementMeta, currentElement;
@@ -265,7 +267,7 @@ LuaScriptInterface::LuaScriptInterface(GameController * c, GameModel * m):
 
 	luaL_dostring (l, "ffi = require(\"ffi\")\n\
 ffi.cdef[[\n\
-typedef struct { int type; int life, ctype; float x, y, vx, vy; float temp; float pavg[2]; int flags; int tmp; int tmp2; unsigned int dcolour; } particle;\n\
+typedef struct { int type; int life, ctype; float x, y, vx, vy; float temp; int tmp3; int tmp4; int flags; int tmp; int tmp2; unsigned int dcolour; } particle;\n\
 ]]\n\
 tpt.parts = ffi.cast(\"particle *\", tpt.partsdata)\n\
 ffi = nil\n\
@@ -3697,7 +3699,7 @@ int LuaScriptInterface::fileSystem_removeFile(lua_State * l)
 {
 	const char * filename = luaL_checkstring(l, 1);
 
-	bool ret = Platform::DeleteFile(filename);
+	bool ret = Platform::RemoveFile(filename);
 	lua_pushboolean(l, ret);
 	return 1;
 }
@@ -4388,9 +4390,11 @@ LuaScriptInterface::~LuaScriptInterface() {
 	delete legacy;
 }
 
+#ifndef NOHTTP
 void LuaScriptInterface::initSocketAPI()
 {
 	LuaTCPSocket::Open(l);
 }
+#endif
 
 #endif

@@ -91,3 +91,5 @@ screenshot_*
 *.sdf
 .Rhistory
 /font/
+compile_commands.json
+ignore/
