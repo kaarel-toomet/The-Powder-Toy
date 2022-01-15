@@ -4084,7 +4084,7 @@ void Simulation::UpdateParticles(int start, int end)
 			}
 			
 			
-			if ((elements[t].Flammable || (t == PT_LAVA && elements[parts[i].ctype].Flammable)) && surround_space) // combustion (the old system is unrealistic)
+			if ((elements[t].Flammable || (t == PT_LAVA && elements[parts[i].ctype].Flammable)) && surround_space) // combustion (the normal system is unrealistic)
 			{
 			  int flammable = elements[t].Flammable;
 			  int type = t;
@@ -4112,12 +4112,14 @@ void Simulation::UpdateParticles(int start, int end)
 			  if (type == PT_RBDM || type == PT_LRBD) {burntemp = 500; trange = 300;}
 			  if (type == PT_BRYL) {burntemp = 2800; trange = 1200;}
 			  if (type == PT_DESL) {trange = 100; burntemp = 335 - pv[y/CELL][x/CELL]*50;}
-			  //if (type == PT_GAS) {burntemp = 500; trange = 300;}
+			  if (type == PT_GAS) {burntemp = 500; trange = 300;}
 			  
 			  if (temp > burntemp + 273.15f + RNG::Ref().between(-trange,trange))
 			  {
 			    if (parts[i].tmp <= 0) {                     // .tmp used because life is used for metals, sponge, etc.
 			      part_change_type(i, x, y, PT_FIRE);
+			      if (type == PT_H2)
+			        parts[i].ctype = PT_WTRV;
 			      parts[i].temp = restrict_flt(temp + fireheat, MIN_TEMP, MAX_TEMP);
 			      parts[i].life = RNG::Ref().between(180, 259);
 			      parts[i].tmp = parts[ID(r)].ctype = 0;
@@ -4145,11 +4147,11 @@ void Simulation::UpdateParticles(int start, int end)
 			  parts[i].pavg[1] = pv[y/CELL][x/CELL];
 			}
 			
-			if (pblock >= 6) // all solids (except CRMC, not because of realism) block pressure
-			  {
-			    air->bmap_blockair[y/CELL][x/CELL] = 1;
-			    air->bmap_blockairh[y/CELL][x/CELL] = 0x8;
-			  }
+			// if (pblock >= 6) // all solids (except CRMC, not because of realism) block pressure
+			//   {
+			//     air->bmap_blockair[y/CELL][x/CELL] = 1;
+			//     air->bmap_blockairh[y/CELL][x/CELL] = 0x8;
+			//   }
 
 
 			s = 1;

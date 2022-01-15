@@ -9,7 +9,7 @@ void Element::Element_OIL()
 	MenuSection = SC_LIQUID;
 	Enabled = 1;
 
-	Advection = 1.0f;
+	Advection = 0.2f;
 	AirDrag = 0.01f * CFDS;
 	AirLoss = 0.98f;
 	Loss = 0.95f;

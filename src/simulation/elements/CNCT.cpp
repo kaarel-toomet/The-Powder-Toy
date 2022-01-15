@@ -26,7 +26,7 @@ void Element::Element_CNCT()
 
 	Weight = 55;
 
-	HeatConduct = 100;
+	HeatConduct = 50;
 	Description = "Concrete, stronger than stone.";
 
 	Properties = TYPE_PART|PROP_HOT_GLOW;

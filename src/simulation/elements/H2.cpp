@@ -21,7 +21,7 @@ void Element::Element_H2()
 	HotAir = 0.000f	* CFDS;
 	Falldown = 0;
 
-	Flammable = 0;
+	Flammable = 30;
 	Explosive = 0;
 	Meltable = 0;
 	Hardness = 0;
@@ -41,6 +41,8 @@ void Element::Element_H2()
 	LowTemperatureTransition = NT;
 	HighTemperature = ITH;
 	HighTemperatureTransition = NT;
+	
+	DefaultProperties.tmp = 5;
 
 	Update = &update;
 }
@@ -56,7 +58,7 @@ static int update(UPDATE_FUNC_ARGS)
 				if (!r)
 					continue;
 				rt = TYP(r);
-				if (sim->pv[y/CELL][x/CELL] > 8.0f && rt == PT_DESL) // This will not work. DESL turns to fire above 5.0 pressure
+				if (sim->pv[y/CELL][x/CELL] > 8.0f && rt == PT_DESL)
 				{
 					sim->part_change_type(ID(r),x+rx,y+ry,PT_WATR);
 					sim->part_change_type(i,x,y,PT_OIL);
@@ -67,28 +69,28 @@ static int update(UPDATE_FUNC_ARGS)
 					if (parts[ID(r)].temp > 2273.15)
 						continue;
 				}
-				else
-				{
-					if (rt==PT_FIRE)
-					{
-						if(parts[ID(r)].tmp&0x02)
-							parts[ID(r)].temp=3473.0f;
-						else
-							parts[ID(r)].temp=2473.15f;
-						parts[ID(r)].tmp |= 1;
-						sim->create_part(i,x,y,PT_FIRE);
-						parts[i].temp += RNG::Ref().between(0, 99);
-						parts[i].tmp |= 1;
-						return 1;
-					}
-					else if ((rt==PT_PLSM && !(parts[ID(r)].tmp&4)) || (rt==PT_LAVA && parts[ID(r)].ctype != PT_BMTL))
-					{
-						sim->create_part(i,x,y,PT_FIRE);
-						parts[i].temp += RNG::Ref().between(0, 99);
-						parts[i].tmp |= 1;
-						return 1;
-					}
-				}
+				// else
+				// {
+				// 	if (rt==PT_FIRE)
+				// 	{
+				// 		if(parts[ID(r)].tmp&0x02)
+				// 			parts[ID(r)].temp=3473.0f;
+				// 		else
+				// 			parts[ID(r)].temp=2473.15f;
+				// 		parts[ID(r)].tmp |= 1;
+				// 		sim->create_part(i,x,y,PT_FIRE);
+				// 		parts[i].temp += RNG::Ref().between(0, 99);
+				// 		parts[i].tmp |= 1;
+				// 		return 1;
+				// 	}
+				// 	else if ((rt==PT_PLSM && !(parts[ID(r)].tmp&4)) || (rt==PT_LAVA && parts[ID(r)].ctype != PT_BMTL))
+				// 	{
+				// 		sim->create_part(i,x,y,PT_FIRE);
+				// 		parts[i].temp += RNG::Ref().between(0, 99);
+				// 		parts[i].tmp |= 1;
+				// 		return 1;
+				// 	}
+				// }
 			}
 	if (parts[i].temp > 2273.15 && sim->pv[y/CELL][x/CELL] > 50.0f)
 	{
@@ -113,7 +115,7 @@ static int update(UPDATE_FUNC_ARGS)
 			{
 				parts[j].ctype = 0x7C0000;
 				parts[j].temp = temp;
-				parts[j].tmp = 0x1;
+				//parts[j].tmp = 0x1;
 			}
 			rx = x + RNG::Ref().between(-1, 1), ry = y + RNG::Ref().between(-1, 1), rt = TYP(pmap[ry][rx]);
 			if (sim->can_move[PT_PLSM][rt] || rt == PT_H2)
@@ -122,7 +124,7 @@ static int update(UPDATE_FUNC_ARGS)
 				if (j>-1)
 				{
 					parts[j].temp = temp;
-					parts[j].tmp |= 4;
+					//parts[j].tmp |= 4;
 				}
 			}
 			parts[i].temp = temp + RNG::Ref().between(750, 1249);

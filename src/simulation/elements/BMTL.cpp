@@ -13,8 +13,8 @@ void Element::Element_BMTL()
 	Enabled = 1;
 
 	Advection = 0.0f;
-	AirDrag = 0.0f * CFDS;
-	AirLoss = 1.00f;
+	AirDrag = 0.10f * CFDS;
+	AirLoss = 0.00f;
 	Loss = 0.00f;
 	Collision = 0.0f;
 	Gravity = 0.0f;
@@ -32,7 +32,7 @@ void Element::Element_BMTL()
 	HeatConduct = 251;
 	Description = "Breakable metal. Common conductive building material, can melt and break under pressure.";
 
-	Properties = TYPE_SOLID|PROP_CONDUCTS|PROP_LIFE_DEC|PROP_HOT_GLOW;
+	Properties = TYPE_SOLID|PROP_CONDUCTS|PROP_LIFE_DEC|PROP_HOT_GLOW|PROP_PAVGDP;
 
 	LowPressure = IPL;
 	LowPressureTransition = NT;
@@ -72,7 +72,13 @@ static int update(UPDATE_FUNC_ARGS)
 		sim->part_change_type(i,x,y,PT_BRMT);
 		
 	}
-	
+	float diff = parts[i].pavg[1] - parts[i].pavg[0];
+	if (diff > 0.60f || diff < -0.60f)
+	{
+	  sim->part_change_type(i,x,y,PT_BRMT);
+	  parts[i].ctype = PT_TUNG;
+	  return 1;
+	}
 	// int bmtl = 0;
 	// if (nt <= 2)
 	//   bmtl = 2;
@@ -94,11 +100,18 @@ static int update(UPDATE_FUNC_ARGS)
 	// }
 	
 	
-	float p = sim->pv[y/CELL][x/CELL];
-	float v = pow(sim->pv[y/CELL+1][x/CELL] - p,2) + pow(sim->pv[y/CELL-1][x/CELL] - p,2);
-	float h = pow(sim->pv[y/CELL][x/CELL+1] - p,2) + pow(sim->pv[y/CELL][x/CELL-1] - p,2);
-	if (h+v > 1)
-	  sim->part_change_type(i,x,y,PT_BRMT);
+	// float p = sim->pv[y/CELL][x/CELL];
+	// float vx = sim->vx[y/CELL][x/CELL];
+	// float vy = sim->vy[y/CELL][x/CELL];
+	// 
+	// float vv = pow(sim->vy[y/CELL+1][x/CELL] - p,2) + pow(sim->vy[y/CELL-1][x/CELL] - p,2);
+	// float vh = pow(sim->vx[y/CELL+1][x/CELL] - p,2) + pow(sim->vx[y/CELL-1][x/CELL] - p,2);
+	// float hv = pow(sim->vy[y/CELL][x/CELL+1] - p,2) + pow(sim->vy[y/CELL][x/CELL-1] - p,2);
+	// float hh = pow(sim->vx[y/CELL][x/CELL+1] - p,2) + pow(sim->vx[y/CELL][x/CELL-1] - p,2);
+	// 
+	// float h = pow(sim->pv[y/CELL][x/CELL+1] - p,2) + pow(sim->pv[y/CELL][x/CELL-1] - p,2);
+	// if (sqrtf(hh+vv) + sqrtf(hv+vh) > 2)
+	//   sim->part_change_type(i,x,y,PT_BRMT);
 	return 0;
 }
 

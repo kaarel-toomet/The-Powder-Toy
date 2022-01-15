@@ -26,7 +26,7 @@ void Element::Element_STNE()
 
 	Weight = 90;
 
-	HeatConduct = 150;
+	HeatConduct = 20;
 	Description = "Heavy particles. Meltable.";
 
 	Properties = TYPE_PART;

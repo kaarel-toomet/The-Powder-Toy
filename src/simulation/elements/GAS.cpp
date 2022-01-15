@@ -39,7 +39,7 @@ void Element::Element_GAS()
 	LowTemperature = ITL;
 	LowTemperatureTransition = NT;
 	HighTemperature = 573.0f;
-	HighTemperatureTransition = PT_FIRE;
+	HighTemperatureTransition = NT;
 	
 	DefaultProperties.tmp = 5;
 }
