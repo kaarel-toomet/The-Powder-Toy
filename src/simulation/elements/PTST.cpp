@@ -54,15 +54,26 @@ static int update(UPDATE_FUNC_ARGS)
 {
   // parts[i].pavg[0] = parts[i].pavg[1];
   // parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
-  if (parts[i].pavg[1]-parts[i].pavg[0] > 2.0f)
+  auto press = int(sim->pv[y/CELL][x/CELL] * 64);
+  auto diff = press - parts[i].tmp3;
+  if (diff > 32 || diff < -32)
   {
-    //sim->part_change_type(i,x,y,PT_POTA);
     sim->kill_part(i);
     sim->create_part(i,x,y,PT_POTA);
     parts[i].temp += 5000;
     sim->pv[y/CELL][x/CELL] += 20.0f * CFDS;
     return 1;
   }
+  parts[i].tmp3 = press;
+  //if (parts[i].pavg[1]-parts[i].pavg[0] > 2.0f)
+  // {
+  //   //sim->part_change_type(i,x,y,PT_POTA);
+  //   sim->kill_part(i);
+  //   sim->create_part(i,x,y,PT_POTA);
+  //   parts[i].temp += 5000;
+  //   sim->pv[y/CELL][x/CELL] += 20.0f * CFDS;
+  //   return 1;
+  // }
   return 0;
 }
 

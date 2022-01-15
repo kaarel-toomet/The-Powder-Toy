@@ -78,11 +78,18 @@ int Element_COAL_update(UPDATE_FUNC_ARGS)
 	{
 	  // parts[i].pavg[0] = parts[i].pavg[1];
 	  // parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
-	  float diff = parts[i].pavg[1] - parts[i].pavg[0];
-	  if (diff > 0.20f || diff < -0.20f)
+	  auto press = int(sim->pv[y/CELL][x/CELL] * 64);
+	  auto diff = press - parts[i].tmp3;
+	  if (diff > 8 || diff < -8)
 	  {
 	    parts[i].tmp -= (int)diff*20;
 	  }
+	  parts[i].tmp3 = press;
+	  // float diff = parts[i].pavg[1] - parts[i].pavg[0];
+	  // if (diff > 0.20f || diff < -0.20f)
+	  // {
+	  //   parts[i].tmp -= (int)diff*20;
+	  // }
 	  
 		// if ((sim->pv[y/CELL][x/CELL] > 4.3f)&&parts[i].tmp>40)
 		// 	parts[i].tmp=39;

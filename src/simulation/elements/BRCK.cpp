@@ -66,14 +66,14 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 
 int update(UPDATE_FUNC_ARGS)
 {
-  // parts[i].pavg[0] = parts[i].pavg[1];
-  // parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
-  float diff = parts[i].pavg[1] - parts[i].pavg[0];
-  if (diff > 0.5f || diff < -0.5f)
+  auto press = int(sim->pv[y/CELL][x/CELL] * 64);
+  auto diff = press - parts[i].tmp3;
+  if (diff > 16 || diff < -16)
   {
-    sim->part_change_type(i,x,y,PT_STNE);
-    return 1;
+    sim->part_change_type(i,x,y,PT_BRMT);
+    parts[i].ctype = PT_BRYL;
   }
+  parts[i].tmp3 = press;
   return 0;
 }
 

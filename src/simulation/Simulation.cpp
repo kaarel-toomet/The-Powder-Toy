@@ -3307,9 +3307,9 @@ int Simulation::create_part(int p, int x, int y, int t, int v)
 	else if (t!=PT_STKM && t!=PT_STKM2 && t!=PT_FIGH)
 		pmap[y][x] = PMAP(i, t);
 
-	if (elements[t].Properties&PROP_PAVGDP) {
-	  parts[i].pavg[1] = pv[y/CELL][x/CELL];
-	}
+	//if (elements[t].Properties&PROP_PAVGDP) {
+	//  parts[i].pavg[1] = pv[y/CELL][x/CELL];
+	//}
 	
 	//Fancy dust effects for powder types
 	if((elements[t].Properties & TYPE_PART) && pretty_powder)
@@ -4124,11 +4124,11 @@ void Simulation::UpdateParticles(int start, int end)
 			  }
 			}
 			
-			if (elements[t].Properties&PROP_PAVGDP) // store pressure change, used for breakables, e.g. GLAS
-			{
-			  parts[i].pavg[0] = parts[i].pavg[1];
-			  parts[i].pavg[1] = pv[y/CELL][x/CELL];
-			}
+			//if (elements[t].Properties&PROP_PAVGDP) // store pressure change, used for breakables, e.g. GLAS
+			//{
+			//  parts[i].pavg[0] = parts[i].pavg[1];
+			//  parts[i].pavg[1] = pv[y/CELL][x/CELL];
+			//}
 			
 			// if (pblock >= 6) // all solids (except CRMC, not because of realism) block pressure
 			//   {

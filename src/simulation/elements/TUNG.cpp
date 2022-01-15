@@ -47,11 +47,7 @@ void Element::Element_TUNG()
 
 	Update = &update;
 	Graphics = &graphics;
-<<<<<<< HEAD
-	// Create = &create;
-=======
 	Create = &create;
->>>>>>> upstream/master
 }
 
 static int update(UPDATE_FUNC_ARGS)
@@ -89,6 +85,7 @@ static int update(UPDATE_FUNC_ARGS)
 		{
 			sim->part_change_type(i, x, y, PT_LAVA);
 			parts[i].ctype = PT_TUNG;
+			parts[i].temp -= 200;
 			return 1;
 		}
 		if(splode)
@@ -99,16 +96,9 @@ static int update(UPDATE_FUNC_ARGS)
 		parts[i].vy += RNG::Ref().between(-50, 50);
 		return 1;
 	}
-<<<<<<< HEAD
-	// parts[i].pavg[0] = parts[i].pavg[1];
-	// parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
-	float diff = parts[i].pavg[1] - parts[i].pavg[0];
-	if (diff > 0.50f || diff < -0.50f)
-=======
 	auto press = int(sim->pv[y/CELL][x/CELL] * 64);
 	auto diff = press - parts[i].tmp3;
 	if (diff > 32 || diff < -32)
->>>>>>> upstream/master
 	{
 		sim->part_change_type(i,x,y,PT_BRMT);
 		parts[i].ctype = PT_TUNG;
@@ -141,14 +131,7 @@ static int graphics(GRAPHICS_FUNC_ARGS)
 	return 0;
 }
 
-<<<<<<< HEAD
-// static void create(ELEMENT_CREATE_FUNC_ARGS)
-// {
-//   sim->parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
-// }
-=======
 static void create(ELEMENT_CREATE_FUNC_ARGS)
 {
 	sim->parts[i].tmp3 = int(sim->pv[y/CELL][x/CELL] * 64);
 }
->>>>>>> upstream/master
