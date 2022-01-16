@@ -2,7 +2,7 @@
 
 int Element_COAL_update(UPDATE_FUNC_ARGS);
 int Element_COAL_graphics(GRAPHICS_FUNC_ARGS);
-// static void create(ELEMENT_CREATE_FUNC_ARGS);
+static void create(ELEMENT_CREATE_FUNC_ARGS);
 
 void Element::Element_COAL()
 {
@@ -50,7 +50,7 @@ void Element::Element_COAL()
 
 	Update = &Element_COAL_update;
 	Graphics = &Element_COAL_graphics;
-	// Create = &create;
+	Create = &create;
 }
 
 int Element_COAL_update(UPDATE_FUNC_ARGS)
@@ -132,7 +132,7 @@ int Element_COAL_graphics(GRAPHICS_FUNC_ARGS)
 	return 0;
 }
 
-// static void create(ELEMENT_CREATE_FUNC_ARGS)
-// {
-  // sim->parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
-// }
+static void create(ELEMENT_CREATE_FUNC_ARGS)
+{
+  sim->parts[i].tmp3 = int(sim->pv[y/CELL][x/CELL] * 64);
+}

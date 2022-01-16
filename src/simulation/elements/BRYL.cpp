@@ -1,7 +1,7 @@
 #include "simulation/ElementCommon.h"
 
 static int update(UPDATE_FUNC_ARGS);
-// static void create(ELEMENT_CREATE_FUNC_ARGS);
+static void create(ELEMENT_CREATE_FUNC_ARGS);
 
 void Element::Element_BRYL()
 {
@@ -46,7 +46,7 @@ void Element::Element_BRYL()
   DefaultProperties.tmp = 5;
   
   Update = &update;
-  // Create = &create;
+  Create = &create;
 }
 
 static int update(UPDATE_FUNC_ARGS)
@@ -62,8 +62,7 @@ static int update(UPDATE_FUNC_ARGS)
   return 0;
 }
 
-// static void create(ELEMENT_CREATE_FUNC_ARGS)
-// {
-//   //sim->parts[i].tmp2 = RNG::Ref().between(0, 10);
-//   sim->parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
-// }
+static void create(ELEMENT_CREATE_FUNC_ARGS)
+{
+  sim->parts[i].tmp3 = int(sim->pv[y/CELL][x/CELL] * 64);
+}

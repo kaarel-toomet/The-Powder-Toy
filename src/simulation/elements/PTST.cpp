@@ -3,7 +3,7 @@
 
 static int update(UPDATE_FUNC_ARGS);
 //static int graphics(GRAPHICS_FUNC_ARGS);
-// static void create(ELEMENT_CREATE_FUNC_ARGS);
+static void create(ELEMENT_CREATE_FUNC_ARGS);
 
 void Element::Element_PTST()
 {
@@ -47,7 +47,7 @@ void Element::Element_PTST()
   
   Update = &update;
   //Graphics = &graphics;
-  // Create = &create;
+  Create = &create;
 }
 
 static int update(UPDATE_FUNC_ARGS)
@@ -58,8 +58,9 @@ static int update(UPDATE_FUNC_ARGS)
   auto diff = press - parts[i].tmp3;
   if (diff > 32 || diff < -32)
   {
-    sim->kill_part(i);
-    sim->create_part(i,x,y,PT_POTA);
+    //sim->kill_part(i);
+    //sim->create_part(i,x,y,PT_POTA);
+    sim->part_change_type(i,x,y,PT_POTA);
     parts[i].temp += 5000;
     sim->pv[y/CELL][x/CELL] += 20.0f * CFDS;
     return 1;
@@ -77,8 +78,8 @@ static int update(UPDATE_FUNC_ARGS)
   return 0;
 }
 
-// static void create(ELEMENT_CREATE_FUNC_ARGS)
-// {
-  //sim->parts[i].tmp2 = RNG::Ref().between(0, 10);
-  // sim->parts[i].pavg[1] = sim->pv[y/CELL][x/CELL];
-// }
+static void create(ELEMENT_CREATE_FUNC_ARGS)
+{
+  sim->parts[i].tmp2 = RNG::Ref().between(0, 10);
+  sim->parts[i].tmp3 = int(sim->pv[y/CELL][x/CELL] * 64);
+}

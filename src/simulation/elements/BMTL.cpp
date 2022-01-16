@@ -2,6 +2,7 @@
 #include "simulation/Air.h"
 
 static int update(UPDATE_FUNC_ARGS);
+static void create(ELEMENT_CREATE_FUNC_ARGS);
 
 void Element::Element_BMTL()
 {
@@ -44,6 +45,7 @@ void Element::Element_BMTL()
 	HighTemperatureTransition = PT_LAVA;
 
 	Update = &update;
+	Create = &create;
 }
 
 static int update(UPDATE_FUNC_ARGS)
@@ -116,6 +118,7 @@ static int update(UPDATE_FUNC_ARGS)
 	return 0;
 }
 
-
-
-
+static void create(ELEMENT_CREATE_FUNC_ARGS)
+{
+  sim->parts[i].tmp3 = int(sim->pv[y/CELL][x/CELL] * 64);
+}

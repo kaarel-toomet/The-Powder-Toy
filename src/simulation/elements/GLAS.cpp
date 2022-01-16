@@ -1,7 +1,7 @@
 #include "simulation/ElementCommon.h"
 
 static int update(UPDATE_FUNC_ARGS);
-// static void create(ELEMENT_CREATE_FUNC_ARGS);
+static void create(ELEMENT_CREATE_FUNC_ARGS);
 
 void Element::Element_GLAS()
 {
@@ -44,7 +44,7 @@ void Element::Element_GLAS()
 	HighTemperatureTransition = PT_LAVA;
 
 	Update = &update;
-	//Create = &create;
+	Create = &create;
 }
 
 static int update(UPDATE_FUNC_ARGS)
