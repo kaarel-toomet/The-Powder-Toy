@@ -21,7 +21,7 @@ void Element::Element_H2()
 	HotAir = 0.000f	* CFDS;
 	Falldown = 0;
 
-	Flammable = 30;
+	Flammable = 40;
 	Explosive = 0;
 	Meltable = 0;
 	Hardness = 0;

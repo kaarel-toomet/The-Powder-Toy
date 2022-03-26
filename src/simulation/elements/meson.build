@@ -206,6 +206,7 @@ simulation_elem_ids = [
 	[ 'CRDE',   204 ],
 	[ 'LNPT',   205 ],
 	[ 'LNPV',   206 ],
+	[ 'CO',     207 ],
 ]
 
 simulation_elem_src = []

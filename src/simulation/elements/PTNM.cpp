@@ -68,6 +68,16 @@ static void hygn_reactions(int hygn1_id, UPDATE_FUNC_ARGS)
 					sim->part_change_type(hygn1_id, (int)(parts[hygn1_id].x + 0.5f), (int)(parts[hygn1_id].y + 0.5f), PT_OIL);
 					return;
 				}
+				
+				// HYGN + CO -> DESL + WATR + Heat (Fischer-Tropsch process)
+				if (rt == PT_CO)
+				{
+				  sim->part_change_type(ID(r), x + rx, y + ry, PT_WATR);
+				  sim->part_change_type(hygn1_id, (int)(parts[hygn1_id].x + 0.5f), (int)(parts[hygn1_id].y + 0.5f), PT_DESL);
+				  parts[ID(r)].temp += 5.0f;
+				  parts[hygn1_id].temp += 5.0f;
+				  return;
+				}
 
 				// HYGN + OXYG -> DSTW + SPRK + Heat
 				if (rt == PT_O2 && !parts[i].life)

@@ -43,5 +43,5 @@ void Element::Element_LNPT()
 	
 	DefaultProperties.tmp = 30;
 	
-	Update = &update;
+	// Update = &update;
 }
