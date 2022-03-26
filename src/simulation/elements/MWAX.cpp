@@ -22,7 +22,7 @@ void Element::Element_MWAX()
 	Flammable = 5;
 	Explosive = 0;
 	Meltable = 0;
-	Hardness = 2;
+	Hardness = 1;
 
 	Weight = 25;
 
@@ -39,7 +39,7 @@ void Element::Element_MWAX()
 	LowTemperature = 318.0f;
 	LowTemperatureTransition = PT_WAX;
 	HighTemperature = 873.0f;
-	HighTemperatureTransition = PT_GAS;
+	HighTemperatureTransition = NT;
 	
 	DefaultProperties.tmp = 20;
 }

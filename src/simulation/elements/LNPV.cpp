@@ -1,10 +1,10 @@
 #include "simulation/ElementCommon.h"
 
-void Element::Element_GAS()
+void Element::Element_LNPV()
 {
-	Identifier = "DEFAULT_PT_GAS";
-	Name = "GAS";
-	Colour = PIXPACK(0xE0FF20);
+	Identifier = "DEFAULT_PT_LNPV";
+	Name = "LNPV";
+	Colour = PIXPACK(0x808060);
 	MenuVisible = 1;
 	MenuSection = SC_GAS;
 	Enabled = 1;
@@ -16,30 +16,30 @@ void Element::Element_GAS()
 	Collision = -0.1f;
 	Gravity = 0.0f;
 	Diffusion = 0.75f;
-	HotAir = 0.001f	* CFDS;
+	HotAir = 0.0005f	* CFDS;
 	Falldown = 0;
 
-	Flammable = 75;
+	Flammable = 60;
 	Explosive = 0;
 	Meltable = 0;
 	Hardness = 1;
 
 	Weight = 1;
 
-	DefaultProperties.temp = R_TEMP + 2.0f + 273.15f;
-	HeatConduct = 42;
-	Description = "Diffuses quickly and is flammable. Liquefies into OIL under pressure.";
+	HeatConduct = 20;
+	Description = "Light naphtha vapors. Flammable. Can explode when mixed with air. Watch out!";
 
 	Properties = TYPE_GAS | PROP_NEUTPASS;
 
 	LowPressure = IPL;
 	LowPressureTransition = NT;
-	HighPressure = 6.0f;
-	HighPressureTransition = PT_OIL;
-	LowTemperature = ITL;
-	LowTemperatureTransition = NT;
-	HighTemperature = 573.0f;
+	HighPressure = IPH;
+	HighPressureTransition = NT;
+	LowTemperature = 313.15f;
+	LowTemperatureTransition = PT_LNPT;
+	HighTemperature = ITH;
 	HighTemperatureTransition = NT;
 	
 	DefaultProperties.tmp = 5;
+	DefaultProperties.temp = 333.15f;
 }

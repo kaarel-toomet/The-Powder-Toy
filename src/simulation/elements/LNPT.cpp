@@ -1,10 +1,11 @@
 #include "simulation/ElementCommon.h"
 
-void Element::Element_OIL()
+
+void Element::Element_LNPT()
 {
-	Identifier = "DEFAULT_PT_OIL";
-	Name = "OIL";
-	Colour = PIXPACK(0x404010);
+	Identifier = "DEFAULT_PT_LNPT";
+	Name = "LNPT";
+	Colour = PIXPACK(0x505030);
 	MenuVisible = 1;
 	MenuSection = SC_LIQUID;
 	Enabled = 1;
@@ -19,7 +20,7 @@ void Element::Element_OIL()
 	HotAir = 0.000f	* CFDS;
 	Falldown = 2;
 
-	Flammable = 50;
+	Flammable = 60;
 	Explosive = 0;
 	Meltable = 0;
 	Hardness = 1;
@@ -27,7 +28,7 @@ void Element::Element_OIL()
 	Weight = 20;
 
 	HeatConduct = 42;
-	Description = "Flammable, turns into GAS at low pressure or high temperature. Can be formed with NEUT and NITR.";
+	Description = "Light naphtha. Volatile and flammable";
 
 	Properties = TYPE_LIQUID | PROP_NEUTPASS;
 
@@ -37,8 +38,10 @@ void Element::Element_OIL()
 	HighPressureTransition = NT;
 	LowTemperature = ITL;
 	LowTemperatureTransition = NT;
-	HighTemperature = 333.0f;
-	HighTemperatureTransition = PT_GAS;
+	HighTemperature = 313.15f;
+	HighTemperatureTransition = PT_LNPV;
 	
-	DefaultProperties.tmp = 20;
+	DefaultProperties.tmp = 30;
+	
+	Update = &update;
 }

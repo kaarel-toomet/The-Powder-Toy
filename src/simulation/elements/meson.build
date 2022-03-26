@@ -203,6 +203,9 @@ simulation_elem_ids = [
 	[ 'BRYL',   201 ],
 	[ 'CALI',   202 ],
 	[ 'PDSC',   203 ],
+	[ 'CRDE',   204 ],
+	[ 'LNPT',   205 ],
+	[ 'LNPV',   206 ],
 ]
 
 simulation_elem_src = []

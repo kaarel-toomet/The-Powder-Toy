@@ -4067,7 +4067,7 @@ void Simulation::UpdateParticles(int start, int end)
 			}
 			
 			
-			if ((elements[t].Flammable || (t == PT_LAVA && elements[parts[i].ctype].Flammable)) && surround_space) // combustion (the normal system is unrealistic)
+			if ((elements[t].Flammable || (t == PT_LAVA && elements[parts[i].ctype].Flammable)) && surround_space) // combustion (tpt's normal system is unrealistic)
 			{
 			  int flammable = elements[t].Flammable;
 			  int type = t;
@@ -4117,6 +4117,8 @@ void Simulation::UpdateParticles(int start, int end)
 			        parts[i].tmp--;
 			        parts[i].temp += fireheat;
 			        parts[f].temp = parts[i].temp;
+			        if (parts[i].type == PT_LNPV) {pv[y/CELL][x/CELL] += 0.5f * CFDS;}
+			        
 			        if (parts[i].life < 50 && RNG::Ref().chance(1,100) && parts[i].temp > 500)
 			          pv[y/CELL][x/CELL] += 0.25f * CFDS;
 			      }
