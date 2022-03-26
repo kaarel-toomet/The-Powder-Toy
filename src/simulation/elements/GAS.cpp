@@ -27,7 +27,7 @@ void Element::Element_GAS()
 	Weight = 1;
 
 	DefaultProperties.temp = R_TEMP + 2.0f + 273.15f;
-	HeatConduct = 42;
+	HeatConduct = 10;
 	Description = "Diffuses quickly and is flammable. Liquefies into OIL under pressure.";
 
 	Properties = TYPE_GAS | PROP_NEUTPASS;

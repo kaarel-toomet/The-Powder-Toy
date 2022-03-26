@@ -28,7 +28,7 @@ void Element::Element_CO()
 
 	Weight = 1;
 
-	HeatConduct = 40;
+	HeatConduct = 20;
 	Description = "Carbon monoxide. Flammable.";
 
 	Properties = TYPE_GAS;

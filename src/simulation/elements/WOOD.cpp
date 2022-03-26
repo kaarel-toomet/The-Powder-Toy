@@ -42,7 +42,7 @@ void Element::Element_WOOD()
 	LowTemperature = ITL;
 	LowTemperatureTransition = NT;
 	HighTemperature = 873.0f;
-	HighTemperatureTransition = NT; // turning into COAL done in update function, temp stored here
+	HighTemperatureTransition = NT; // turning into COAL and gases done in update function, temp stored here
 	
 	DefaultProperties.tmp = 50;
 
@@ -57,8 +57,25 @@ static int update(UPDATE_FUNC_ARGS)
 	
 	if (parts[i].temp > sim->elements[PT_WOOD].HighTemperature + RNG::Ref().between(0,200) && RNG::Ref().chance(1,50))
 	{
-	  sim->part_change_type(i, x, y, PT_COAL);
-	  parts[i].life = parts[i].tmp;
+	  
+	  int nt = RNG::Ref().between(0,2);
+	  switch (nt) {
+	  case 0:
+	    sim->part_change_type(i,x,y,PT_COAL);
+	    parts[i].life = parts[i].tmp;
+	    break;
+	  case 1:
+	    sim->part_change_type(i,x,y,PT_CO);
+	    parts[i].life = 5;
+	    break;
+	  case 2:
+	    sim->part_change_type(i,x,y,PT_H2);
+	    parts[i].life = 5;
+	    break;
+	  }
+	  
+	  //sim->part_change_type(i, x, y, PT_COAL);
+	  
 	}
 	  
 

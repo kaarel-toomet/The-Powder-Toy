@@ -70,8 +70,8 @@ int update(UPDATE_FUNC_ARGS)
   auto diff = press - parts[i].tmp3;
   if (diff > 16 || diff < -16)
   {
-    sim->part_change_type(i,x,y,PT_BRMT);
-    parts[i].ctype = PT_BRYL;
+    sim->part_change_type(i,x,y,PT_STNE);
+    //parts[i].ctype = PT_BRYL;
   }
   parts[i].tmp3 = press;
   return 0;

@@ -12,10 +12,10 @@ void Element::Element_EMBR()
 	MenuSection = SC_EXPLOSIVE;
 	Enabled = 1;
 
-	Advection = 0.4f;
+	Advection = 0.1f;
 	AirDrag = 0.001f * CFDS;
 	AirLoss = 0.99f;
-	Loss = 0.90f;
+	Loss = 0.99f;
 	Collision = 0.0f;
 	Gravity = 0.07f;
 	Diffusion = 0.00f;

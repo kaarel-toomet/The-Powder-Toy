@@ -26,8 +26,8 @@ void Element::Element_LNPV()
 
 	Weight = 1;
 
-	HeatConduct = 20;
-	Description = "Light naphtha vapors. Flammable. Can explode when mixed with air. Watch out!";
+	HeatConduct = 10;
+	Description = "Light naphtha vapors. Very flammable. Can explode when mixed with air; watch out!";
 
 	Properties = TYPE_GAS | PROP_NEUTPASS;
 

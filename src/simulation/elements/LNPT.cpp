@@ -1,5 +1,6 @@
 #include "simulation/ElementCommon.h"
 
+static int update(UPDATE_FUNC_ARGS);
 
 void Element::Element_LNPT()
 {
@@ -43,5 +44,16 @@ void Element::Element_LNPT()
 	
 	DefaultProperties.tmp = 30;
 	
-	// Update = &update;
+	Update = &update;
+}
+
+static int update(UPDATE_FUNC_ARGS)
+{
+  if (parts[i].temp > RNG::Ref().between(230, 313.15) && RNG::Ref().chance(1, 50))
+  {
+    
+    sim->part_change_type(i,x,y,PT_LNPV);
+    
+  }
+  return 0;
 }
